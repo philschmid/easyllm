@@ -6,3 +6,6 @@ import os
 import sys
 
 x = 2
+
+# mypy checks
+# x.upper() # E: "int" has no attribute "upper"

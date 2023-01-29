@@ -1,4 +1,4 @@
-# Python Project Template
+# Welcome to Python Project Template
 
 This is a template for Python projects. It is intended to be a starting point for new projects, and provides a structure that can be used consistently across projects.
 
@@ -13,6 +13,9 @@ mv  myproject/ mynewproject/
 # rename the project in the pyproject.toml file
 sed -i "" "s/myproject/mynewproject/g" pyproject.toml
 ```
+
+Adjust documentation in `docs/index.md` and `README.md` to your needs.
+
 
 ## Scipts
 
@@ -36,3 +39,8 @@ The following scripts are available:
 ## Acknowledgements
 
 This project was insipred by the structure of [fastapi](https://github.com/tiangolo/fastapi/blob/master/pyproject.toml) and created with [Hatch](https://hatch.pypa.io/latest/).
+
+## Code
+
+Link to a function in the code:
+[`Object 1`][myproject.utils.fancy_function]

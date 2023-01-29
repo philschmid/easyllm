@@ -45,6 +45,13 @@ test = [
   "hatch",
 ]
 dev = ["ruff", "black", "isort", "pre-commit >=2.17.0,<3.0.0", "hatch"]
+docs = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocstrings",
+  "mkdocstrings-python",
+  "mkdocs-autorefs",
+]
 
 [tool.isort]
 profile = "black"
