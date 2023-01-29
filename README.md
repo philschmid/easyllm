@@ -14,6 +14,13 @@ mv  myproject/ mynewproject/
 sed -i "" "s/myproject/mynewproject/g" pyproject.toml
 ```
 
+## Scipts
+
+The following scripts are available:
+- `make style`: run the ruff fix
+- `make check`: run the ruff check
+- `make test`: run the tests
+
 ## Features
 
 - [x] Python version: 3.8
@@ -22,7 +29,6 @@ sed -i "" "s/myproject/mynewproject/g" pyproject.toml
 - [x] lint, format, sorting with [ruff](https://github.com/charliermarsh/ruff)
 - [x] testing with [pytest](https://docs.pytest.org/en/stable/)
 - [x] cli suppored with `cli.py` file and installed automatically
-- [x] .pre-commit-config.yaml file for pre-commit hooks
 
 
 ## Acknowledgements
