@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 __version__ = "0.0.1"
-import sys
 import os
+import sys
 
 x = 2
