@@ -2,6 +2,8 @@
 
 This is a template for Python projects. It is intended to be a starting point for new projects, and provides a structure that can be used consistently across projects.
 
+Documentation: https://philschmid.github.io/python-project-template/
+
 ## Getting Started
 
 Fork the repository and clone it to your local machine. Then, run the following commands to rename all folders, files and variable from `myproject` to the name of your project:
@@ -13,6 +15,8 @@ mv  myproject/ mynewproject/
 # rename the project in the pyproject.toml file
 sed -i "" "s/myproject/mynewproject/g" pyproject.toml
 ```
+
+Adjust documentation in `docs/index.md` and `README.md` to your needs.
 
 ## Scipts
 
