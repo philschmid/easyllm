@@ -26,9 +26,11 @@ jobs:
         id: cache
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}
+          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-check
       - name: Install build dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install ".[dev]"
       - name: Run library checks
-        run: make check
+        run: |
+          ruff .
+          mypy .
