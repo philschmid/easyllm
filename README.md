@@ -31,6 +31,7 @@ The following scripts are available:
 - [x] cli suppored with `cli.py` file and installed automatically
 - [x] type checking with [mypy](https://mypy.readthedocs.io/en/stable/) -> remove `mypy` from `pyproject.toml` and `makefile` if not needed
 - [x] documentation with [mkdocs](https://www.mkdocs.org/) with automatic deployment to github pages through and support for docstrings using (https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html). More extension here: https://chrieke.medium.com/the-best-mkdocs-plugins-and-customizations-fc820eb19759
+  - for auto deployment enable permissions for github actions: https://github.com/ad-m/github-push-action/issues/96#issuecomment-889984928
 
 
 ## Acknowledgements

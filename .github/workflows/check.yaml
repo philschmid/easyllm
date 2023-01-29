@@ -31,6 +31,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install ".[dev]"
       - name: Run library checks
-        run: |
-          ruff .
-          mypy .
+        run: make check

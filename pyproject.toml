@@ -36,15 +36,8 @@ scripts = { myproject = "myproject.cli:main" }
 dependencies = ["starlette==0.22.0"]
 
 [project.optional-dependencies]
-test = [
-  "pytest",
-  "ruff",
-  "black",
-  "isort",
-  "pre-commit >=2.17.0,<3.0.0",
-  "hatch",
-]
-dev = ["ruff", "black", "isort", "pre-commit >=2.17.0,<3.0.0", "hatch"]
+test = ["pytest", "ruff", "black", "isort", "mypy", "hatch"]
+dev = ["ruff", "black", "isort", "mypy", "hatch"]
 docs = [
   "mkdocs",
   "mkdocs-material",
