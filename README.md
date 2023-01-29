@@ -9,11 +9,9 @@ Fork the repository and clone it to your local machine. Then, run the following 
 ```bash
 newproject="mynewproject"
 # rename and delete the project folder
-mv myproject ${newproject}
+mv  myproject/ mynewproject/
 # rename the project in the pyproject.toml file
-sed -i 's/myproject/${newproject}/g' pyproject.toml
-# rename the project in the README.md file
-sed -i 's/myproject/${newproject}/g' README.md
+sed -i "" "s/myproject/mynewproject/g" pyproject.toml
 ```
 
 ## Features
@@ -24,6 +22,7 @@ sed -i 's/myproject/${newproject}/g' README.md
 - [x] lint, format, sorting with [ruff](https://github.com/charliermarsh/ruff)
 - [x] testing with [pytest](https://docs.pytest.org/en/stable/)
 - [x] cli suppored with `cli.py` file and installed automatically
+- [x] .pre-commit-config.yaml file for pre-commit hooks
 
 
 ## Acknowledgements
