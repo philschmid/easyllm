@@ -32,6 +32,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
 ]
 dynamic = ["version"]
+scripts = { myproject = "myproject.cli:main" }
 dependencies = [
   "starlette==0.22.0",
   "pydantic >=1.6.2,!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0",
@@ -40,7 +41,6 @@ dependencies = [
 [project.optional-dependencies]
 test = ["pytest", "ruff", "black", "isort"]
 dev = ["ruff", "black", "isort", "pre-commit >=2.17.0,<3.0.0", "hatch"]
-
 
 [tool.isort]
 profile = "black"
