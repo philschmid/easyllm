@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.urls]
+Documentation = "https://github.com/unknown/hatch-demo#readme"
+Issues = "https://github.com/unknown/hatch-demo/issues"
+Source = "https://github.com/unknown/hatch-demo"
+
+[tool.hatch.version]
+path = "myproject/__init__.py"
+
+[project]
+name = "myproject"
+description = "Description"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{ name = "Philipp Schmid", email = "schmidphilipp1995@gmail.com" }]
+classifiers = [
+  "Topic :: Internet",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development",
+  "Framework :: FastAPI",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dynamic = ["version"]
+dependencies = [
+  "starlette==0.22.0",
+  "pydantic >=1.6.2,!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "ruff", "black", "isort"]
+dev = ["ruff", "black", "isort", "pre-commit >=2.17.0,<3.0.0", "hatch"]
+
+
+[tool.isort]
+profile = "black"
+known_third_party = ["fastapi", "pydantic", "starlette"]
+
+# [tool.coverage.run]
+# parallel = true
+# source = [
+#     "docs_src",
+#     "tests",
+#     "fastapi"
+# ]
+# context = '${CONTEXT}'
+# omit = [
+#     "docs_src/response_model/tutorial003_04.py",
+#     "docs_src/response_model/tutorial003_04_py310.py",
+# ]
+
+[tool.ruff]
+select = [
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  "I", # isort
+  "C", # flake8-comprehensions
+  "B", # flake8-bugbear
+]
+ignore = [
+  "E501", # line too long, handled by black
+  "B008", # do not perform function calls in argument defaults
+  "C901", # too complex
+]
+# Same as Black.
+line-length = 119
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8.
+target-version = "py38"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+# [tool.ruff.isort]
+# known-third-party = ["fastapi", "pydantic", "starlette"]
