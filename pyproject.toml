@@ -11,7 +11,7 @@ Source = "https://github.com/unknown/hatch-demo"
 path = "myproject/__init__.py"
 
 [project]
-name = "myproject"
+name = "easyllm"
 description = "Description"
 readme = "README.md"
 requires-python = ">=3.8"
