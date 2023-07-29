@@ -30,4 +30,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install ".[docs]"
       - name: publish documentation
-        run: mkdocs gh-deploy --force
+        run: make docs-deploy
