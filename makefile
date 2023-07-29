@@ -1,4 +1,4 @@
-.PHONY: style check test
+.PHONY: style check test docs copy-docs docs-deploy
 
 check_dirs := . 
 
@@ -9,3 +9,15 @@ check:
 	mypy $(check_dirs)
 test: 
 	pytest
+
+
+copy-docs:
+	cp -r notebooks/* docs/examples/
+
+docs:
+	$(MAKE) copy-docs
+	mkdocs serve
+
+docs-deploy:
+	$(MAKE) copy-docs
+	mkdocs gh-deploy --force

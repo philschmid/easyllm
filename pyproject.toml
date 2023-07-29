@@ -14,7 +14,7 @@ path = "easyllm/__init__.py"
 name = "easyllm"
 description = "Description"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 license = "MIT"
 authors = [{ name = "Philipp Schmid", email = "schmidphilipp1995@gmail.com" }]
 classifiers = [
@@ -33,7 +33,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 scripts = { easyllm = "easyllm.cli:main" }
-dependencies = ["starlette==0.22.0"]
+dependencies = ["pydantic==2.1.1", "nanoid==2.0.0", "huggingface-hub==0.16.4"]
 
 [project.optional-dependencies]
 test = ["pytest", "ruff", "black", "isort", "mypy", "hatch"]
@@ -44,6 +44,7 @@ docs = [
   "mkdocstrings",
   "mkdocstrings-python",
   "mkdocs-autorefs",
+  "mkdocs-jupyter",
 ]
 
 [tool.isort]
@@ -84,7 +85,7 @@ line-length = 119
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Assume Python 3.9.
-target-version = "py39"
+target-version = "py38"
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]

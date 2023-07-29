@@ -1,46 +1,131 @@
-# Welcome to Python Project Template
+# EasyLLM
 
-This is a template for Python projects. It is intended to be a starting point for new projects, and provides a structure that can be used consistently across projects.
+EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. 
 
-## Getting Started
+EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion` with, for example, `huggingface.ChatCompletion`.
 
-Fork the repository and clone it to your local machine. Then, run the following commands to rename all folders, files and variable from `easyllm` to the name of your project:
-  
+* [ChatCompletion Clients](./clients.md)
+* [Prompt Utils](./prompt_utils.md)
+* [Examples](./examples/chat-completion-api.md)
+
+## 🚀 Getting Started
+
+Install EasyLLM via pip:
+
 ```bash
-newproject="mynewproject"
-# rename and delete the project folder
-mv  easyllm/ mynewproject/
-# rename the project in the pyproject.toml file
-sed -i "" "s/easyllm/mynewproject/g" pyproject.toml
+pip install easyllm
 ```
 
-Adjust documentation in `docs/index.md` and `README.md` to your needs.
+Then import and start using the clients:
+
+```python
+
+from easyllm.clients import huggingface
+from easyllm.prompt_utils import build_llama2_prompt
+
+# helper to build llama2 prompt
+huggingface.prompt_builder = build_llama2_prompt
+
+response = huggingface.ChatCompletion.create(
+    model="meta-llama/Llama-2-70b-chat-hf",
+    messages=[
+        {"role": "system", "content": "\nYou are a helpful assistant speaking like a pirate. argh!"},
+        {"role": "user", "content": "What is the sun?"},
+    ],
+      temperature=0.9,
+      top_p=0.6,
+      max_tokens=256,
+)
+
+print(response)
+```
+the result will look like 
+
+```bash
+{
+  "id": "hf-lVC2iTMkFJ",
+  "object": "chat.completion",
+  "created": 1690661144,
+  "model": "meta-llama/Llama-2-70b-chat-hf",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": " Arrrr, the sun be a big ol' ball o' fire in the sky, me hearty! It be the source o' light and warmth for our fair planet, and it be a mighty powerful force, savvy? Without the sun, we'd be sailin' through the darkness, lost and cold, so let's give a hearty \"Yarrr!\" for the sun, me hearties! Arrrr!"
+      },
+      "finish_reason": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 111,
+    "completion_tokens": 299,
+    "total_tokens": 410
+  }
+}
+```
+
+Check out other examples:  
+
+* [Detailed ChatCompletion Example](examples/chat-completion-api)
+* [Example how to stream requests](examples/stream-chat-completion-api)
 
 
-## Scipts
+## 💪🏻 Migration from OpenAI to HuggingFace
 
-The following scripts are available:
-- `make style`: run the ruff fix
-- `make check`: run the ruff check
-- `make test`: run the tests
+Migrating from OpenAI to HuggingFace is easy. Just change the import statement and the client you want to use and optionally the prompt builder.
 
-## Features
-
-- [x] Python version: 3.9
-- [x] project structure: `pyproject.toml` and `src/`
-- [x] Building system: [Hatch](https://hatch.pypa.io/latest/)
-- [x] lint, format, sorting with [ruff](https://github.com/charliermarsh/ruff)
-- [x] testing with [pytest](https://docs.pytest.org/en/stable/)
-- [x] cli suppored with `cli.py` file and installed automatically
-- [x] type checking with [mypy](https://mypy.readthedocs.io/en/stable/) -> remove `mypy` from `pyproject.toml` and `makefile` if not needed
-- [x] documentation with [mkdocs](https://www.mkdocs.org/) with automatic deployment to github pages through and support for docstrings using (https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html). More extension here: https://chrieke.medium.com/the-best-mkdocs-plugins-and-customizations-fc820eb19759
+```diff
+-import openai
++ from easyllm.clients import huggingface
++ from easyllm.clients import huggingface
++ huggingface.prompt_builder = build_llama2_prompt
 
 
-## Acknowledgements
+-response = openai.ChatCompletion.create(
++response = huggingface.ChatCompletion.create(
+-    model="gpt-3.5-turbo",
++    model="meta-llama/Llama-2-70b-chat-hf",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Knock knock."},
+    ],
+)
+```
 
-This project was insipred by the structure of [fastapi](https://github.com/tiangolo/fastapi/blob/master/pyproject.toml) and created with [Hatch](https://hatch.pypa.io/latest/).
+Make sure when you switch your client that your hyperparameters are still valid. For example, `temperature` of GPT-3 might be different than `temperature` of `Llama-2`.
 
-## Code
+## ☑️ Key Features
+
+### 🤝 Compatible Clients
+
+- Implementation of clients compatible with OpenAI API format of `openai.ChatCompletion`.
+- Easily switch between different LLMs like `openai.ChatCompletion` and `huggingface.ChatCompletion` by changing one line of code. 
+- Support for streaming of completions, checkout example [How to stream completions](./notebooks/stream-chat-completions.ipynb).
+
+### ⚙️ Helper Modules ⚙️
+
+- `evol_instruct` (work in progress) - Use evolutionary algorithms create instructions for LLMs.
+
+- `prompt_utils` - Helper methods to easily convert between prompt formats like OpenAI Messages to prompts for open source models like Llama 2.
+
+## 📔 Citation & Acknowledgements
+
+If you use EasyLLM, please share it with me on social media or email. I would love to hear about it!
+You can also cite the project using the following BibTeX:
+
+```bash
+@software{Philipp_Schmid_EasyLLM_2023,
+author = {Philipp Schmid},
+license = {Apache-2.0},
+month = juj,
+title = {EasyLLM: Streamlined Tools for LLMs},
+url = {https://github.com/philschmid/easyllm},
+year = {2023}
+}
+```
+
+<!-- ## Code
 
 Link to a function in the code:
-[`Object 1`][easyllm.utils.fancy_function]
+[`Object 1`][easyllm.utils.fancy_function] -->
