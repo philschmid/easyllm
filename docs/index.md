@@ -4,14 +4,14 @@ This is a template for Python projects. It is intended to be a starting point fo
 
 ## Getting Started
 
-Fork the repository and clone it to your local machine. Then, run the following commands to rename all folders, files and variable from `myproject` to the name of your project:
+Fork the repository and clone it to your local machine. Then, run the following commands to rename all folders, files and variable from `easyllm` to the name of your project:
   
 ```bash
 newproject="mynewproject"
 # rename and delete the project folder
-mv  myproject/ mynewproject/
+mv  easyllm/ mynewproject/
 # rename the project in the pyproject.toml file
-sed -i "" "s/myproject/mynewproject/g" pyproject.toml
+sed -i "" "s/easyllm/mynewproject/g" pyproject.toml
 ```
 
 Adjust documentation in `docs/index.md` and `README.md` to your needs.
@@ -26,7 +26,7 @@ The following scripts are available:
 
 ## Features
 
-- [x] Python version: 3.8
+- [x] Python version: 3.9
 - [x] project structure: `pyproject.toml` and `src/`
 - [x] Building system: [Hatch](https://hatch.pypa.io/latest/)
 - [x] lint, format, sorting with [ruff](https://github.com/charliermarsh/ruff)
@@ -43,4 +43,4 @@ This project was insipred by the structure of [fastapi](https://github.com/tiang
 ## Code
 
 Link to a function in the code:
-[`Object 1`][myproject.utils.fancy_function]
+[`Object 1`][easyllm.utils.fancy_function]

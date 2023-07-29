@@ -1,11 +1,11 @@
-site_name: myproject
+site_name: easyllm
 
 # mkdocs.yml
 theme:
-  name: "material"
+  name: 'material'
   palette:
     # Palette toggle for light mode
-    - media: "(prefers-color-scheme: light)"
+    - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: blue grey
       toggle:
@@ -13,20 +13,20 @@ theme:
         name: Switch to dark mode
 
     # Palette toggle for dark mode
-    - media: "(prefers-color-scheme: dark)"
+    - media: '(prefers-color-scheme: dark)'
       scheme: slate
       primary: blue grey
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
 plugins:
-- search
-# - social
-- tags
-- mkdocstrings:
-    handlers:
-      python:
-        options:
-          show_source: False
-        import:
-        - https://docs.python-requests.org/en/master/objects.inv
+  - search
+  # - social
+  - tags
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: False
+          import:
+            - https://docs.python-requests.org/en/master/objects.inv

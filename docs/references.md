@@ -3,4 +3,4 @@
 
 
 ### Documentation for `fancy_function`
-::: myproject.utils.fancy_function
+::: easyllm.utils.fancy_function
