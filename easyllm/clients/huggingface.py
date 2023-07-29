@@ -1,7 +1,6 @@
 import logging
 import os
 from typing import Any, Dict
-import warnings
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
