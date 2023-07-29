@@ -1,6 +1,7 @@
 # Project information
 site_name: EasyLLM
 site_author: Philipp Schmid
+# site_url: https://phil
 site_description: >-
   EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. 
 

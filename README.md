@@ -1,4 +1,4 @@
-# EasyLLM
+# EasyLLM - 
 
 EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. 
 
