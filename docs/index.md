@@ -78,7 +78,6 @@ Migrating from OpenAI to HuggingFace is easy. Just change the import statement a
 ```diff
 -import openai
 + from easyllm.clients import huggingface
-+ from easyllm.clients import huggingface
 + huggingface.prompt_builder = build_llama2_prompt
 
 
