@@ -1,6 +1,6 @@
 # EasyLLM - 
 
-EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. 
+EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. Get immediataly started or check out the [documentation](https://philschmid.github.io/easyllm/).
 
 EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion` with, for example, `huggingface.ChatCompletion`.
 
@@ -65,7 +65,7 @@ Check out other examples:
 * [Detailed ChatCompletion Example](examples/chat-completion-api)
 * [Example how to stream requests](examples/stream-chat-completion-api)
 
-See the [documentation](docs/README.md) for more detailed usage and examples.
+See the [documentation](https://philschmid.github.io/easyllm/) for more detailed usage and examples.
 
 ## 💪🏻 Migration from OpenAI to HuggingFace
 
