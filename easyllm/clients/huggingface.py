@@ -153,27 +153,22 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                 res = client.text_generation(
                     prompt,
                     # TODO: fix when details is fixed
-                    details=False,
-                    decoder_input_details=False,
+                    details=True,
+                    # decoder_input_details=False,
                     **gen_kwargs,
                 )
+                print(res.details)
                 parsed = ChatCompletionResponseChoice(
                     index=_i,
-                    # TODO: fix when details is fixed
-                    # message=ChatMessage(role="assistant", content=res.details.generated_text),
-                    message=ChatMessage(role="assistant", content=res),
-                    # TODO: fix when details is fixed
-                    # finish_reason=res.details.finish_reason,
+                    message=ChatMessage(role="assistant", content=res.generated_text),
+                    finish_reason=res.details.finish_reason.value,
                 )
-                # TODO: fix when details is fixed
-                # generated_tokens += res.details.generated_tokens
-                generated_tokens = len(res)
+                generated_tokens += res.details.generated_tokens
                 choices.append(parsed)
                 logger.debug(f"Response at index {_i}:\n{parsed}")
             # calcuate usage details
-            # prompt_tokens = len(res[0].details.prefill)
             # TODO: fix when details is fixed
-            prompt_tokens = len(prompt)
+            prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens
 
             return ChatCompletionResponse(
