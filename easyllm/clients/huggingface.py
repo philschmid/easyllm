@@ -157,7 +157,6 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                     # decoder_input_details=False,
                     **gen_kwargs,
                 )
-                print(res.details)
                 parsed = ChatCompletionResponseChoice(
                     index=_i,
                     message=ChatMessage(role="assistant", content=res.generated_text),
