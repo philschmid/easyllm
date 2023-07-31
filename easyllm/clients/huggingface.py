@@ -152,9 +152,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             for _i in range(r.n):
                 res = client.text_generation(
                     prompt,
-                    # TODO: fix when details is fixed
                     details=True,
-                    # decoder_input_details=False,
                     **gen_kwargs,
                 )
                 parsed = ChatCompletionResponseChoice(
