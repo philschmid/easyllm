@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 
@@ -10,5 +10,5 @@ class ChatMessage(BaseModel):
 
 class Usage(BaseModel):
     prompt_tokens: int
-    completion_tokens: int
+    completion_tokens: Optional[int] = None
     total_tokens: int

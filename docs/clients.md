@@ -6,11 +6,13 @@ Currently supported clients are:
 
 - `ChatCompletion` - ChatCompletion clients are used to interface with LLMs that are compatible with the OpenAI ChatCompletion API.
 - `Completion` - Completion clients are used to interface with LLMs that are compatible with the OpenAI Completion API.
+- `Embedding` - Embedding clients are used to interface with LLMs that are compatible with the OpenAI Embedding API.
 
 Currently supported clients are:  
 
 - `huggingface.ChatCompletion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI ChatCompletion API.
 - `huggingface.Completion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI Completion API.
+- `huggingface.Embedding` - a client for interfacing with HuggingFace models that are compatible with the OpenAI Embedding API.
 
 ## `huggingface.ChatCompletion`
 
@@ -90,6 +92,30 @@ Supported parameters are:
 * `debug` - Whether to enable debug logging. Defaults to False.
 * `echo` - Whether to echo the prompt. Defaults to False.
 * `logprobs` - Weather to return logprobs. Defaults to None.
+
+
+## `huggingface.Embedding`
+
+The `huggingface.Embedding` client is used to interface with HuggingFace models running as an API that are compatible with the OpenAI Embedding API. Checkout the [Examples](../examples/get-embeddings) for more details.
+
+```python
+from easyllm.clients import huggingface
+
+# The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
+# huggingface.api_key="hf_xxx"
+
+embedding = huggingface.Embedding.create(
+    model="sentence-transformers/all-MiniLM-L6-v2",
+    text="What is the meaning of life?",
+)
+
+len(embedding["data"][0]["embedding"])
+```
+
+Supported parameters are:
+
+* `model` - The model to use to create the embedding. If not provided, the defaults to base url.
+* `input` -  `Union[str, List[str]]` document(s) to embed.
 
 
 ## Environment Configuration

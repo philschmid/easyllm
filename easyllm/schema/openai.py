@@ -104,3 +104,22 @@ class CompletionStreamResponse(BaseModel):
     created: int = Field(default_factory=lambda: int(time.time()))
     model: str
     choices: List[CompletionResponseStreamChoice]
+
+
+class EmbeddingsRequest(BaseModel):
+    model: Optional[str] = None
+    input: Union[str, List[Any]]
+    user: Optional[str] = None
+
+
+class EmbeddingsObjectResponse(BaseModel):
+    index: int
+    object: str = "embedding"
+    embedding: List[float]
+
+
+class EmbeddingsResponse(BaseModel):
+    object: str = "list"
+    data: List[EmbeddingsObjectResponse]
+    model: str
+    usage: Usage

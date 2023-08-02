@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from typing import Any, Dict
@@ -19,6 +20,9 @@ from easyllm.schema.openai import (
     CompletionResponseStreamChoice,
     CompletionStreamResponse,
     DeltaMessage,
+    EmbeddingsObjectResponse,
+    EmbeddingsRequest,
+    EmbeddingsResponse,
 )
 from easyllm.utils import logger
 
@@ -327,6 +331,66 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                     prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
                 ),
             ).model_dump(exclude_none=True)
+
+    @classmethod
+    async def acreate(cls, *args, **kwargs):
+        """
+        Creates a new chat completion for the provided messages and parameters.
+        """
+        raise NotImplementedError("ChatCompletion.acreate is not implemented")
+
+
+class Embedding:
+    @staticmethod
+    def create(**kwargs) -> Dict[str, Any]:
+        """
+        Creates a new embeddings for the provided prompt and parameters.
+        Args:
+            param1 (int): The first parameter.
+            param2 (Optional[str]): The second parameter. Defaults to None.
+
+        Tip: Prompt builder
+            Make sure to always use a prompt builder for your model.
+        """
+        # deserialize the request
+        debug = kwargs.pop("debug", False)
+        if debug:
+            logger.setLevel(logging.DEBUG)
+
+        r = EmbeddingsRequest(**kwargs)
+
+        # if the model is a url, use it directly
+        if r.model:
+            if api_base.endswith("/models"):
+                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{r.model}"
+            else:
+                url = f"{api_base}/{r.model}"
+            logger.debug(f"Url:\n{url}")
+
+        # create the client
+        client = InferenceClient(url, token=api_key)
+
+        # client is currently not supporting batched request thats why we run sequentially
+        emb = []
+        res = client.post(json={"inputs": r.input, "model": r.model, "task": "feature-extraction"})
+        parsed_res = json.loads(res.decode())
+        if isinstance(r.input, list):
+            for idx, i in enumerate(parsed_res):
+                emb.append(EmbeddingsObjectResponse(index=idx, embedding=i))
+        else:
+            emb.append(EmbeddingsObjectResponse(index=0, embedding=parsed_res))
+
+        if isinstance(res, list):
+            # TODO: only approximating tokens
+            tokens = [int(len(i) / 4) for i in r.input]
+        else:
+            tokens = int(len(r.input) / 4)
+
+        return EmbeddingsResponse(
+            model=r.model,
+            data=emb,
+            usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
+        ).model_dump(exclude_none=True)
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
