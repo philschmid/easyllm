@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Union
 
 from easyllm.schema.base import ChatMessage
 
 llama2_stop_sequences = ["</s>"]
 
 
-def build_llama2_prompt(messages: List[ChatMessage]) -> str:
+def build_llama2_prompt(messages: Union[List[ChatMessage], str]) -> str:
     """
     Uses LLama 2 chat tokens (`[INST]`) to create a prompt, learn more in the [Hugging Face Blog on how to prompt Llama 2](https://huggingface.co/blog/llama2#how-to-prompt-llama-2). If a `Message` with an unsupported `role` is passed, an error will be thrown.
     Args:
@@ -15,6 +15,9 @@ def build_llama2_prompt(messages: List[ChatMessage]) -> str:
     startPrompt = "<s>[INST] "
     endPrompt = " [/INST]"
     conversation = []
+
+    if isinstance(messages, str):
+        messages = [ChatMessage(content=messages, role="user")]
 
     for index, message in enumerate(messages):
         if message.role == "user":

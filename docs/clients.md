@@ -5,11 +5,12 @@ In the context of EasyLLM, a "client" refers to the code that interfaces with a 
 Currently supported clients are:  
 
 - `ChatCompletion` - ChatCompletion clients are used to interface with LLMs that are compatible with the OpenAI ChatCompletion API.
-
+- `Completion` - Completion clients are used to interface with LLMs that are compatible with the OpenAI Completion API.
 
 Currently supported clients are:  
 
 - `huggingface.ChatCompletion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI ChatCompletion API.
+- `huggingface.Completion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI Completion API.
 
 ## `huggingface.ChatCompletion`
 
@@ -22,6 +23,7 @@ from easyllm.prompt_utils import build_llama2_prompt
 
 # The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
 # huggingface.api_key="hf_xxx"
+hubbingface.prompt_builder = build_llama2_prompt
 
 response = huggingface.ChatCompletion.create(
     model="meta-llama/Llama-2-70b-chat-hf",
@@ -29,9 +31,9 @@ response = huggingface.ChatCompletion.create(
         {"role": "system", "content": "\nYou are a helpful, respectful and honest assistant."},
         {"role": "user", "content": "Knock knock."},
     ],
-      temperature=0.9,
-      top_p=0.6,
-      max_tokens=1024,
+    temperature=0.9,
+    top_p=0.6,
+    max_tokens=1024,
 )
 ```
 
@@ -46,8 +48,53 @@ Supported parameters are:
 * `n` - The number of completions to generate. Defaults to 1.
 * `max_tokens` - The maximum number of tokens to generate. Defaults to 1024.
 * `stop` - The stop sequence(s) to use for the completion. Defaults to None.
+* `stream` - Whether to stream the completion. Defaults to False.
 * `frequency_penalty` - The frequency penalty to use for the completion. Defaults to 1.0.
 * `debug` - Whether to enable debug logging. Defaults to False.
+
+## `huggingface.Completion`
+
+The `huggingface.Completion` client is used to interface with HuggingFace models running on Text Generation infernece that are compatible with the OpenAI Completion API. Checkout the [Examples](../examples/text-completion-api) for more details and [How to stream completions](../examples/stream-text-completion-api) for an example how to stream requests.
+
+
+```python
+from easyllm.clients import huggingface
+from easyllm.prompt_utils import build_llama2_prompt
+
+# The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
+# huggingface.api_key="hf_xxx"
+hubbingface.prompt_builder = build_llama2_prompt
+
+response = huggingface.Completion.create(
+    model="meta-llama/Llama-2-70b-chat-hf",
+    prompt="What is the meaning of life?",
+    temperature=0.9,
+    top_p=0.6,
+    max_tokens=1024,
+)
+```
+
+
+Supported parameters are:
+
+* `model` - The model to use for the completion. If not provided, the defaults to base url.
+* `prompt` -  Text to use for the completion, if prompt_builder is set, prompt will be formatted with the prompt_builder.
+* `temperature` - The temperature to use for the completion. Defaults to 0.9.
+* `top_p` - The top_p to use for the completion. Defaults to 0.6.
+* `top_k` - The top_k to use for the completion. Defaults to 10.
+* `n` - The number of completions to generate. Defaults to 1.
+* `max_tokens` - The maximum number of tokens to generate. Defaults to 1024.
+* `stop` - The stop sequence(s) to use for the completion. Defaults to None.
+* `stream` - Whether to stream the completion. Defaults to False.
+* `frequency_penalty` - The frequency penalty to use for the completion. Defaults to 1.0.
+* `debug` - Whether to enable debug logging. Defaults to False.
+* `echo` - Whether to echo the prompt. Defaults to False.
+* `logprobs` - Weather to return logprobs. Defaults to None.
+
+
+## Environment Configuration
+
+You can configure the `huggingface` client by setting environment variables or overwriting the default values. See below on how to adjust the HF token, url and prompt builder.
 
 ### Setting HF token 
 
