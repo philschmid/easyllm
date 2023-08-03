@@ -4,6 +4,15 @@ EasyLLM is an open source project that provides helpful tools and methods for wo
 
 EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion`, `openai.Completion`, `openai.Embedding` with, for example, `huggingface.ChatCompletion`, `huggingface.Completion` or `huggingface.Embedding` by changing one line of code.
 
+### Supported Clients 
+
+* `huggingface` - [HuggingFace](https://huggingface.co/) models
+  * `huggingface.ChatCompletion` - Chat with LLMs
+  * `huggingface.Completion` - Text completion with LLMs
+  * `huggingface.Embedding` - Create embeddings with LLMs
+
+Check out the [Examples](./examples) to get started.
+
 ## 🚀 Getting Started
 
 Install EasyLLM via pip:
@@ -62,11 +71,11 @@ the result will look like
 ```
 
 Check out other examples:
-* [Detailed ChatCompletion Example](examples/chat-completion-api)
-* [Example how to stream chat requests](examples/stream-chat-completion-api)
-* [Example how to stream text requests](examples/stream-text-completion-api)
-* [Detailed Completion Example](examples/text-completion-api)
-* [Create Embeddings](examples/get-embeddings)
+* [Detailed ChatCompletion Example](notebboks/chat-completion-api.ipynb)
+* [Example how to stream chat requests](notebboks/stream-chat-completion.ipynb)
+* [Example how to stream text requests](notebboks/stream-text-completion.ipynb)
+* [Detailed Completion Example](notebboks/text-completion-api.ipynb)
+* [Create Embeddings](notebboks/get-embeddings)
 
 See the [documentation](https://philschmid.github.io/easyllm/) for more detailed usage and examples.
 

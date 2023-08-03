@@ -4,9 +4,9 @@ EasyLLM is an open source project that provides helpful tools and methods for wo
 
 EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion` with, for example, `huggingface.ChatCompletion`.
 
-* [ChatCompletion Clients](./clients.md)
-* [Prompt Utils](./prompt_utils.md)
-* [Examples](./examples/chat-completion-api.md)
+* [ChatCompletion Clients](./clients)
+* [Prompt Utils](./prompt_utils)
+* [Examples](./examples)
 
 ## 🚀 Getting Started
 
@@ -65,10 +65,12 @@ the result will look like
 }
 ```
 
-Check out other examples:  
-
+Check out other examples:
 * [Detailed ChatCompletion Example](examples/chat-completion-api)
-* [Example how to stream requests](examples/stream-chat-completion-api)
+* [Example how to stream chat requests](examples/stream-chat-completion)
+* [Example how to stream text requests](examples/stream-text-completion)
+* [Detailed Completion Example](examples/text-completion-api)
+* [Create Embeddings](examples/get-embeddings)
 
 
 ## 💪🏻 Migration from OpenAI to HuggingFace
@@ -100,7 +102,7 @@ Make sure when you switch your client that your hyperparameters are still valid.
 
 - Implementation of clients compatible with OpenAI API format of `openai.ChatCompletion`.
 - Easily switch between different LLMs like `openai.ChatCompletion` and `huggingface.ChatCompletion` by changing one line of code. 
-- Support for streaming of completions, checkout example [How to stream completions](./notebooks/stream-chat-completions.ipynb).
+- Support for streaming of completions, checkout example [How to stream completions](examples/stream-chat-completions).
 
 ### ⚙️ Helper Modules ⚙️
 

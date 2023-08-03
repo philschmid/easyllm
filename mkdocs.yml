@@ -107,13 +107,20 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
 
-
 nav:
   - Documentation:
     - EasyLLM: index.md 
     - Installation: installation.md
-    - "Getting Started":
-      - clients.md
+    - "API Reference":
+      - "Clients":
+        - clients/index.md
+        - clients/huggingface.md
+      - prompt_utils.md
   - Examples:
-    - examples/chat-completion-api.ipynb
-    - examples/stream-chat-completions.ipynb
+    - examples/index.md
+    - "Hugging Face":
+      - examples/chat-completion-api.ipynb
+      - examples/stream-chat-completions.ipynb
+      - examples/text-completion-api.ipynb
+      - examples/stream-text-completions.ipynb
+      - examples/get-embeddings.ipynb
