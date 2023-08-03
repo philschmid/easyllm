@@ -8,7 +8,7 @@ Easyllm provides a client for interfacing with HuggingFace models. The client is
 
 ## `huggingface.ChatCompletion`
 
-The `huggingface.ChatCompletion` client is used to interface with HuggingFace models running on Text Generation infernece that are compatible with the OpenAI ChatCompletion API. Checkout the [Examples](../examples/chat-completion-api) for more details and [How to stream completions](../examples/stream-chat-completion-api) for an example how to stream requests.
+The `huggingface.ChatCompletion` client is used to interface with HuggingFace models running on Text Generation inference that are compatible with the OpenAI ChatCompletion API. Checkout the [Examples](../examples/chat-completion-api) for more details and [How to stream completions](../examples/stream-chat-completion-api) for an example how to stream requests.
 
 
 ```python
@@ -48,7 +48,7 @@ Supported parameters are:
 
 ## `huggingface.Completion`
 
-The `huggingface.Completion` client is used to interface with HuggingFace models running on Text Generation infernece that are compatible with the OpenAI Completion API. Checkout the [Examples](../examples/text-completion-api) for more details and [How to stream completions](../examples/stream-text-completion-api) for an example how to stream requests.
+The `huggingface.Completion` client is used to interface with HuggingFace models running on Text Generation inference that are compatible with the OpenAI Completion API. Checkout the [Examples](../examples/text-completion-api) for more details and [How to stream completions](../examples/stream-text-completion-api) for an example how to stream requests.
 
 
 ```python
