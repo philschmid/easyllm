@@ -96,7 +96,8 @@ class ChatCompletion:
 
         Args:
             messages (`List[ChatMessage]`): to use for the completion.
-            model (`str`, *optional*): The model to use for the completion. If not provided, defaults to the base url.
+            model (`str`, *optional*, defaults to None): The model to use for the completion. If not provided,
+                defaults to the base url.
             temperature (`float`, defaults to 0.9): The temperature to use for the completion.
             top_p (`float`, defaults to 0.6): The top_p to use for the completion.
             top_k (`int`, *optional*, defaults to 10): The top_k to use for the completion.
@@ -253,8 +254,8 @@ def stream_completion_request(client, prompt, stop, gen_kwargs, model):
 class Completion:
     @staticmethod
     def create(
-        model: str,
         prompt: Union[str, List[Any]],
+        model: Optional[str] = None,
         suffix: Optional[str] = None,
         temperature: float = 0.9,
         top_p: float = 0.6,
@@ -272,9 +273,10 @@ class Completion:
         Creates a new completion for the provided prompt and parameters.
 
         Args:
-            model (`str`) The model to use for the completion.
             prompt (`Union[str, List[Any]]`) Text to use for the completion, if `prompt_builder` is set,
                 prompt will be formatted with the `prompt_builder`.
+            model (`str`, *optional*, defaults to None) The model to use for the completion. If not provided,
+                defaults to the base url.
             suffix (`str`, *optional*, defaults to None) If defined, append this suffix to the prompt.
             temperature (`float`, defaults to 0.9): The temperature to use for the completion.
             top_p (`float`, defaults to 0.6): The top_p to use for the completion.
@@ -428,7 +430,8 @@ class Embedding:
 
         Args:
             input (`Union[str, List[Any]]`) document(s) to embed.
-            model (`str`, *optional*, defaults to None) The model to use for the completion.
+            model (`str`, *optional*, defaults to None) The model to use for the completion. If not provided,
+                defaults to the base url.
             debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
