@@ -124,3 +124,4 @@ nav:
       - examples/text-completion-api.ipynb
       - examples/stream-text-completions.ipynb
       - examples/get-embeddings.ipynb
+      - examples/inference-endpoints-example.ipynb
