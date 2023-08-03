@@ -1,6 +1,6 @@
 # Hugging Face 
 
-Easyllm provides a client for interfacing with HuggingFace models. The client is compatible with the [HuggingFace Inference API](https://huggingface.co/docs/api-inference/index), [Hugging Face Inference Endpoints](https://huggingface.co/docs/inference-endpoints/index) or any Web Service running [Text Generation Inference](https://github.com/huggingface/text-generation-inference) or compatible API endpoints. 
+EasyLLM provides a client for interfacing with HuggingFace models. The client is compatible with the [HuggingFace Inference API](https://huggingface.co/docs/api-inference/index), [Hugging Face Inference Endpoints](https://huggingface.co/docs/inference-endpoints/index) or any Web Service running [Text Generation Inference](https://github.com/huggingface/text-generation-inference) or compatible API endpoints. 
 
 - `huggingface.ChatCompletion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI ChatCompletion API.
 - `huggingface.Completion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI Completion API.
