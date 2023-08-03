@@ -1,6 +1,5 @@
 # test_build_chatml_hf_prompt.py
 
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.chatml_hf import build_chatml_hf_prompt

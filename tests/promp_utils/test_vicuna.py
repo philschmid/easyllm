@@ -1,6 +1,5 @@
 # test_build_vicuna_prompt.py
 
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.vicuna import build_vicuna_prompt

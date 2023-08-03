@@ -1,6 +1,5 @@
 # test_build_open_assistant_prompt.py
 
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.open_assistant import build_open_assistant_prompt

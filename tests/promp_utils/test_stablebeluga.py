@@ -1,6 +1,5 @@
 # test_build_stablebeluga_prompt.py
 
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.stablebeluga import build_stablebeluga_prompt

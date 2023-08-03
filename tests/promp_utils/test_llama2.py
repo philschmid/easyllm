@@ -1,4 +1,3 @@
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.llama2 import build_llama2_prompt

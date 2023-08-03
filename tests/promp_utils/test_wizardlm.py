@@ -1,6 +1,5 @@
 # test_build_wizardlm_prompt.py
 
-from typing import List
 import pytest
 
 from easyllm.prompt_utils.wizardlm import build_wizardlm_prompt
