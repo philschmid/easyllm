@@ -114,7 +114,7 @@ class ChatCompletion:
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = ChatCompletionRequest(
+        request = ChatCompletionRequest(
             messages=messages,
             model=model,
             temperature=temperature,
@@ -132,19 +132,19 @@ class ChatCompletion:
                 f"""huggingface.prompt_builder is not set.
 Using default prompt builder for. Prompt sent to model will be:
 ----------------------------------------
-{buildBasePrompt(r.messages)}.
+{buildBasePrompt(request.messages)}.
 ----------------------------------------
 If you want to use a custom prompt builder, set huggingface.prompt_builder to a function that takes a list of messages and returns a string.
 You can also use existing prompt builders by importing them from easyllm.prompt_utils"""
             )
-            prompt = buildBasePrompt(r.messages)
+            prompt = buildBasePrompt(request.messages)
         else:
-            prompt = prompt_builder(r.messages)
+            prompt = prompt_builder(request.messages)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
 
         # if the model is a url, use it directly
-        if r.model:
-            url = f"{api_base}/{r.model}"
+        if request.model:
+            url = f"{api_base}/{request.model}"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
@@ -153,45 +153,45 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         client = InferenceClient(url, token=api_key)
 
         # create stop sequences
-        if isinstance(r.stop, list):
-            stop = stop_sequences + r.stop
-        if isinstance(r.stop, str):
-            stop = stop_sequences + [r.stop]
+        if isinstance(request.stop, list):
+            stop = stop_sequences + request.stop
+        if isinstance(request.stop, str):
+            stop = stop_sequences + [request.stop]
         else:
             stop = stop_sequences
         logger.debug(f"Stop sequences:\n{stop}")
 
         # check if we can stream
-        if r.stream is True and r.n > 1:
+        if request.stream is True and request.n > 1:
             raise ValueError("Cannot stream more than one completion")
 
         # create generation parameters
-        if r.top_p == 0:
-            r.top_p = 2e-4
-        if r.top_p == 1:
-            r.top_p = 0.9999999
-        if r.temperature == 0:
-            r.temperature = 2e-4
+        if request.top_p == 0:
+            request.top_p = 2e-4
+        if request.top_p == 1:
+            request.top_p = 0.9999999
+        if request.temperature == 0:
+            request.temperature = 2e-4
 
         gen_kwargs = {
             "do_sample": True,
             "return_full_text": False,
-            "max_new_tokens": r.max_tokens,
-            "top_p": float(r.top_p),
-            "temperature": float(r.temperature),
+            "max_new_tokens": request.max_tokens,
+            "top_p": float(request.top_p),
+            "temperature": float(request.temperature),
             "stop_sequences": stop,
-            "repetition_penalty": r.frequency_penalty,
-            "top_k": r.top_k,
+            "repetition_penalty": request.frequency_penalty,
+            "top_k": request.top_k,
             "seed": seed,
         }
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
-        if r.stream:
-            return stream_chat_request(client, prompt, stop, gen_kwargs, r.model)
+        if request.stream:
+            return stream_chat_request(client, prompt, stop, gen_kwargs, request.model)
         else:
             choices = []
             generated_tokens = 0
-            for _i in range(r.n):
+            for _i in range(request.n):
                 res = client.text_generation(
                     prompt,
                     details=True,
@@ -211,7 +211,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             total_tokens = prompt_tokens + generated_tokens
 
             return ChatCompletionResponse(
-                model=r.model,
+                model=request.model,
                 choices=choices,
                 usage=Usage(
                     prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
