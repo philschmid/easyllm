@@ -71,11 +71,11 @@ the result will look like
 ```
 
 Check out other examples:
-* [Detailed ChatCompletion Example](notebboks/chat-completion-api.ipynb)
-* [Example how to stream chat requests](notebboks/stream-chat-completions.ipynb)
-* [Example how to stream text requests](notebboks/stream-text-completions.ipynb)
-* [Detailed Completion Example](notebboks/text-completion-api.ipynb)
-* [Create Embeddings](notebboks/get-embeddings)
+* [Detailed ChatCompletion Example](notebooks/chat-completion-api.ipynb)
+* [Example how to stream chat requests](notebooks/stream-chat-completions.ipynb)
+* [Example how to stream text requests](notebooks/stream-text-completions.ipynb)
+* [Detailed Completion Example](notebooks/text-completion-api.ipynb)
+* [Create Embeddings](notebooks/get-embeddings)
 
 See the [documentation](https://philschmid.github.io/easyllm/) for more detailed usage and examples.
 
