@@ -1,14 +1,6 @@
-# Clients
+# Hugging Face 
 
-In the context of EasyLLM, a "client" refers to the code that interfaces with a particular LLM API, e.g. OpenAI.
-
-Currently supported clients are:  
-
-- `ChatCompletion` - ChatCompletion clients are used to interface with LLMs that are compatible with the OpenAI ChatCompletion API.
-- `Completion` - Completion clients are used to interface with LLMs that are compatible with the OpenAI Completion API.
-- `Embedding` - Embedding clients are used to interface with LLMs that are compatible with the OpenAI Embedding API.
-
-Currently supported clients are:  
+Easyllm provides a client for interfacing with HuggingFace models. The client is compatible with the [HuggingFace Inference API](https://huggingface.co/docs/api-inference/index), [Hugging Face Inference Endpoints](https://huggingface.co/docs/inference-endpoints/index) or any Web Service running [Text Generation Inference](https://github.com/huggingface/text-generation-inference) or compatible API endpoints. 
 
 - `huggingface.ChatCompletion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI ChatCompletion API.
 - `huggingface.Completion` - a client for interfacing with HuggingFace models that are compatible with the OpenAI Completion API.
