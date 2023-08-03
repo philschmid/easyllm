@@ -425,6 +425,7 @@ class Embedding:
     ) -> Dict[str, Any]:
         """
         Creates a new embeddings for the provided prompt and parameters.
+
         Args:
             input (`Union[str, List[Any]]`) document(s) to embed.
             model (`str`, *optional*, defaults to None) The model to use for the completion.
