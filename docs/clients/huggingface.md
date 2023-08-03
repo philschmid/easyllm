@@ -135,10 +135,12 @@ By default the `huggingface` client will try to read the `HUGGINGFACE_API_BASE` 
 Alternatively you can set the url manually by setting `huggingface.api_base`. If you set a custom you have to leave the `model` parameter empty. 
 
 
+
 ```python
 from easyllm.clients import huggingface
 
 huggingface.api_base="https://my-url"
+
 
 res = huggingface.ChatCompletion.create(...)
 ```
