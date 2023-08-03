@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 .ruff_cache
 docs/examples/*.ipynb
+.vscode
