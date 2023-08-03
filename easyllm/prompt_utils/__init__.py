@@ -6,3 +6,4 @@ from .chatml_hf import (
     chatml_starchat_stop_sequences,
 )
 from .vicuna import build_vicuna_prompt, vicuna_stop_sequences
+from .wizardlm import build_wizardlm_prompt, wizardlm_stop_sequences
