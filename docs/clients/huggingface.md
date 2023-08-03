@@ -130,15 +130,17 @@ res = huggingface.ChatCompletion.create(...)
 
 ### Changing url 
 
-By default the `huggingface` client will try to read the `HUGGINGFACE_API_BASE` environment variable. If this is not set, it will use the default url `https://api-inference.huggingface.co/models`. This is helpful if you want to use a different url like `https://api-inference.huggingface.co/models` or a local url like `http://localhost:8000` or an Hugging Face Inference Endpoint.
+By default the `huggingface` client will try to read the `HUGGINGFACE_API_BASE` environment variable. If this is not set, it will use the default url `https://api-inference.huggingface.co/models`. This is helpful if you want to use a different url like `https://zj5lt7pmzqzbp0d1.us-east-1.aws.endpoints.huggingface.cloud` or a local url like `http://localhost:8000` or an Hugging Face Inference Endpoint.
 
-Alternatively you can set the url manually by setting `huggingface.api_base`.
+Alternatively you can set the url manually by setting `huggingface.api_base`. If you set a custom you have to leave the `model` parameter empty. 
+
 
 
 ```python
 from easyllm.clients import huggingface
 
-huggingface.api_base="hf_xxx"
+huggingface.api_base="https://my-url"
+
 
 res = huggingface.ChatCompletion.create(...)
 ```
