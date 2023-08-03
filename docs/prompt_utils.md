@@ -71,7 +71,6 @@ messages=[
 prompt = build_chatml_falcon_prompt(messages)
 ```
 
-
 ## WizardLM Chat builder 
 
 Builds a WizardLM prompt for a chat conversation as defined in the [WizardLM repository](https://github.com/nlpxucan/WizardLM/blob/main/WizardLM/src/infer_wizardlm13b.py#L79)
@@ -85,4 +84,19 @@ messages=[
     {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
 ]
 prompt = build_wizardlm_prompt(messages)
+```
+
+## StableBeluga2 Chat builder 
+
+Builds a StableBeluga2 prompt for a chat conversation as defined in the [Model Card](https://huggingface.co/stabilityai/StableBeluga2)
+. If a `Message` with an unsupported `role` is passed, an error will be thrown.
+
+```python
+from easyllm.prompt_utils import build_stablebeluga_prompt
+
+messages=[
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+]
+prompt = build_stablebeluga_prompt(messages)
 ```

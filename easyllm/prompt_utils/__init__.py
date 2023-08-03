@@ -7,3 +7,4 @@ from .chatml_hf import (
 )
 from .vicuna import build_vicuna_prompt, vicuna_stop_sequences
 from .wizardlm import build_wizardlm_prompt, wizardlm_stop_sequences
+from .stablebeluga import build_stablebeluga_prompt, stablebeluga_stop_sequences
