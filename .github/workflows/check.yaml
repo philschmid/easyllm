@@ -8,6 +8,9 @@ on:
       - 'easyllm/**'
       - 'tests/**'
   pull_request:
+      paths:
+      - 'easyllm/**'
+      - 'tests/**'
   workflow_dispatch:
 
 concurrency:
