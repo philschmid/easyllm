@@ -2,6 +2,16 @@
 
 The `prompt_utils`  module contains functions to assist with converting Message's Dictionaries into prompts that can be used with `ChatCompletion` clients. 
 
+Supported prompt formats:
+
+* [Llama 2](#llama-2-chat-builder)
+* [Vicuna](#vicuna-chat-builder)
+* [Hugging Face ChatML](#hugging-face-chatml-builder)
+* [WizardLM](#wizardlm-chat-builder)
+* [StableBeluga2](#stablebeluga2-chat-builder)
+* [Open Assistant](#open-assistant-chat-builder)
+
+
 ## Set prompt builder for client
 
 ```python
