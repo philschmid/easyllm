@@ -32,9 +32,9 @@ response = huggingface.ChatCompletion.create(
         {"role": "system", "content": "\nYou are a helpful assistant speaking like a pirate. argh!"},
         {"role": "user", "content": "What is the sun?"},
     ],
-      temperature=0.9,
-      top_p=0.6,
-      max_tokens=256,
+    temperature=0.9,
+    top_p=0.6,
+    max_tokens=256,
 )
 
 print(response)
@@ -66,6 +66,7 @@ the result will look like
 ```
 
 Check out other examples:
+
 * [Detailed ChatCompletion Example](examples/chat-completion-api)
 * [Example how to stream chat requests](examples/stream-chat-completion)
 * [Example how to stream text requests](examples/stream-text-completion)
