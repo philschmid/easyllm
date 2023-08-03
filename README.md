@@ -72,8 +72,8 @@ the result will look like
 
 Check out other examples:
 * [Detailed ChatCompletion Example](notebboks/chat-completion-api.ipynb)
-* [Example how to stream chat requests](notebboks/stream-chat-completion.ipynb)
-* [Example how to stream text requests](notebboks/stream-text-completion.ipynb)
+* [Example how to stream chat requests](notebboks/stream-chat-completions.ipynb)
+* [Example how to stream text requests](notebboks/stream-text-completions.ipynb)
 * [Detailed Completion Example](notebboks/text-completion-api.ipynb)
 * [Create Embeddings](notebboks/get-embeddings)
 
