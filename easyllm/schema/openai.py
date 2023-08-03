@@ -12,13 +12,13 @@ from easyllm.schema.base import ChatMessage, Usage
 class ChatCompletionRequest(BaseModel):
     messages: List[ChatMessage]
     model: Optional[str] = None
-    temperature: Optional[float] = 0.9
-    top_p: Optional[float] = 0.6
+    temperature: float = 0.9
+    top_p: float = 0.6
     top_k: Optional[int] = 10
-    n: Optional[int] = 1
-    max_tokens: Optional[int] = 1024
+    n: int = 1
+    max_tokens: int = 1024
     stop: Optional[List[str]] = None
-    stream: Optional[bool] = False
+    stream: bool = False
     frequency_penalty: Optional[float] = 1.0
     user: Optional[str] = None
 
@@ -61,18 +61,17 @@ class CompletionRequest(BaseModel):
     model: Optional[str] = None
     prompt: Union[str, List[Any]]
     suffix: Optional[str] = None
-    temperature: Optional[float] = 0.9
-    top_p: Optional[float] = 0.6
+    temperature: float = 0.9
+    top_p: float = 0.6
     top_k: Optional[int] = 10
-    n: Optional[int] = 1
-    max_tokens: Optional[int] = 1024
+    n: int = 1
+    max_tokens: int = 1024
     stop: Optional[List[str]] = None
-    stream: Optional[bool] = False
+    stream: bool = False
     frequency_penalty: Optional[float] = 1.0
     user: Optional[str] = None
-    logprobs: Optional[bool] = None
-    echo: Optional[bool] = False
-    user: Optional[str] = None
+    logprobs: bool = False
+    echo: bool = False
 
 
 class CompletionResponseChoice(BaseModel):

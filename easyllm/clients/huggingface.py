@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Union
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
@@ -78,41 +78,73 @@ def stream_chat_request(client, prompt, stop, gen_kwargs, model):
 
 class ChatCompletion:
     @staticmethod
-    def create(**kwargs) -> Dict[str, Any]:
+    def create(
+        messages: List[ChatMessage],
+        model: Optional[str] = None,
+        temperature: float = 0.9,
+        top_p: float = 0.6,
+        top_k: Optional[int] = 10,
+        n: int = 1,
+        max_tokens: int = 1024,
+        stop: Optional[List[str]] = None,
+        stream: bool = False,
+        frequency_penalty: Optional[float] = 1.0,
+        debug: bool = False,
+    ) -> Dict[str, Any]:
         """
         Creates a new chat completion for the provided messages and parameters.
+
         Args:
-            param1 (int): The first parameter.
-            param2 (Optional[str]): The second parameter. Defaults to None.
+            messages (`List[ChatMessage]`): to use for the completion.
+            model (`str`, *optional*, defaults to None): The model to use for the completion. If not provided,
+                defaults to the base url.
+            temperature (`float`, defaults to 0.9): The temperature to use for the completion.
+            top_p (`float`, defaults to 0.6): The top_p to use for the completion.
+            top_k (`int`, *optional*, defaults to 10): The top_k to use for the completion.
+            n (`int`, defaults to 1): The number of completions to generate.
+            max_tokens (`int`, defaults to 1024): The maximum number of tokens to generate.
+            stop (`List[str]`, *optional*, defaults to None): The stop sequence(s) to use for the completion.
+            stream (`bool`, defaults to False): Whether to stream the completion.
+            frequency_penalty (`float`, *optional*, defaults to 1.0): The frequency penalty to use for the completion.
+            debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
             Make sure to always use a prompt builder for your model.
         """
-        # deserialize the request
-        debug = kwargs.pop("debug", False)
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = ChatCompletionRequest(**kwargs)
+        request = ChatCompletionRequest(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            n=n,
+            max_tokens=max_tokens,
+            stop=stop,
+            stream=stream,
+            frequency_penalty=frequency_penalty,
+        )
 
         if prompt_builder is None:
             logging.warn(
                 f"""huggingface.prompt_builder is not set.
 Using default prompt builder for. Prompt sent to model will be:
 ----------------------------------------
-{buildBasePrompt(r.messages)}.
+{buildBasePrompt(request.messages)}.
 ----------------------------------------
 If you want to use a custom prompt builder, set huggingface.prompt_builder to a function that takes a list of messages and returns a string.
 You can also use existing prompt builders by importing them from easyllm.prompt_utils"""
             )
-            prompt = buildBasePrompt(r.messages)
+            prompt = buildBasePrompt(request.messages)
         else:
-            prompt = prompt_builder(r.messages)
+            prompt = prompt_builder(request.messages)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
 
         # if the model is a url, use it directly
-        if r.model:
-            url = f"{api_base}/{r.model}"
+        if request.model:
+            url = f"{api_base}/{request.model}"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
@@ -121,45 +153,45 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         client = InferenceClient(url, token=api_key)
 
         # create stop sequences
-        if isinstance(r.stop, list):
-            stop = stop_sequences + r.stop
-        if isinstance(r.stop, str):
-            stop = stop_sequences + [r.stop]
+        if isinstance(request.stop, list):
+            stop = stop_sequences + request.stop
+        if isinstance(request.stop, str):
+            stop = stop_sequences + [request.stop]
         else:
             stop = stop_sequences
         logger.debug(f"Stop sequences:\n{stop}")
 
         # check if we can stream
-        if r.stream is True and r.n > 1:
+        if request.stream is True and request.n > 1:
             raise ValueError("Cannot stream more than one completion")
 
         # create generation parameters
-        if r.top_p == 0:
-            r.top_p = 2e-4
-        if r.top_p == 1:
-            r.top_p = 0.9999999
-        if r.temperature == 0:
-            r.temperature = 2e-4
+        if request.top_p == 0:
+            request.top_p = 2e-4
+        if request.top_p == 1:
+            request.top_p = 0.9999999
+        if request.temperature == 0:
+            request.temperature = 2e-4
 
         gen_kwargs = {
             "do_sample": True,
             "return_full_text": False,
-            "max_new_tokens": r.max_tokens,
-            "top_p": float(r.top_p),
-            "temperature": float(r.temperature),
+            "max_new_tokens": request.max_tokens,
+            "top_p": float(request.top_p),
+            "temperature": float(request.temperature),
             "stop_sequences": stop,
-            "repetition_penalty": r.frequency_penalty,
-            "top_k": r.top_k,
+            "repetition_penalty": request.frequency_penalty,
+            "top_k": request.top_k,
             "seed": seed,
         }
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
-        if r.stream:
-            return stream_chat_request(client, prompt, stop, gen_kwargs, r.model)
+        if request.stream:
+            return stream_chat_request(client, prompt, stop, gen_kwargs, request.model)
         else:
             choices = []
             generated_tokens = 0
-            for _i in range(r.n):
+            for _i in range(request.n):
                 res = client.text_generation(
                     prompt,
                     details=True,
@@ -179,7 +211,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             total_tokens = prompt_tokens + generated_tokens
 
             return ChatCompletionResponse(
-                model=r.model,
+                model=request.model,
                 choices=choices,
                 usage=Usage(
                     prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
@@ -221,45 +253,87 @@ def stream_completion_request(client, prompt, stop, gen_kwargs, model):
 
 class Completion:
     @staticmethod
-    def create(**kwargs) -> Dict[str, Any]:
+    def create(
+        prompt: Union[str, List[Any]],
+        model: Optional[str] = None,
+        suffix: Optional[str] = None,
+        temperature: float = 0.9,
+        top_p: float = 0.6,
+        top_k: Optional[int] = 10,
+        n: int = 1,
+        max_tokens: int = 1024,
+        stop: Optional[List[str]] = None,
+        stream: bool = False,
+        frequency_penalty: Optional[float] = 1.0,
+        logprobs: bool = False,
+        echo: bool = False,
+        debug: bool = False,
+    ) -> Dict[str, Any]:
         """
         Creates a new completion for the provided prompt and parameters.
+
         Args:
-            param1 (int): The first parameter.
-            param2 (Optional[str]): The second parameter. Defaults to None.
+            prompt (`Union[str, List[Any]]`) Text to use for the completion, if `prompt_builder` is set,
+                prompt will be formatted with the `prompt_builder`.
+            model (`str`, *optional*, defaults to None) The model to use for the completion. If not provided,
+                defaults to the base url.
+            suffix (`str`, *optional*, defaults to None) If defined, append this suffix to the prompt.
+            temperature (`float`, defaults to 0.9): The temperature to use for the completion.
+            top_p (`float`, defaults to 0.6): The top_p to use for the completion.
+            top_k (`int`, *optional*, defaults to 10): The top_k to use for the completion.
+            n (`int`, defaults to 1): The number of completions to generate.
+            max_tokens (`int`, defaults to 1024): The maximum number of tokens to generate.
+            stop (`List[str]`, *optional*, defaults to None): The stop sequence(s) to use for the completion.
+            stream (`bool`, defaults to False): Whether to stream the completion.
+            frequency_penalty (`float`, *optional*, defaults to 1.0): The frequency penalty to use for the completion.
+            logprobs (`bool`, defaults to False) Weather to return logprobs.
+            echo (`bool`, defaults to False) Whether to echo the prompt.
+            debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
             Make sure to always use a prompt builder for your model.
         """
-        # deserialize the request
-        debug = kwargs.pop("debug", False)
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = CompletionRequest(**kwargs)
+        request = CompletionRequest(
+            model=model,
+            prompt=prompt,
+            suffix=suffix,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            n=n,
+            max_tokens=max_tokens,
+            stop=stop,
+            stream=stream,
+            frequency_penalty=frequency_penalty,
+            logprobs=logprobs,
+            echo=echo,
+        )
 
         # include suffix if it exists
-        if r.suffix is not None:
-            r.prompt = r.prompt + r.suffix
+        if request.suffix is not None:
+            request.prompt = request.prompt + request.suffix
 
         if prompt_builder is None:
             logging.warn(
                 f"""huggingface.prompt_builder is not set.
 Using default prompt builder for. Prompt sent to model will be:
 ----------------------------------------
-{buildBasePrompt(r.prompt)}.
+{buildBasePrompt(request.prompt)}.
 ----------------------------------------
 If you want to use a custom prompt builder, set huggingface.prompt_builder to a function that takes a list of messages and returns a string.
 You can also use existing prompt builders by importing them from easyllm.prompt_utils"""
             )
-            prompt = buildBasePrompt(r.prompt)
+            prompt = buildBasePrompt(request.prompt)
         else:
-            prompt = prompt_builder(r.prompt)
+            prompt = prompt_builder(request.prompt)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
 
         # if the model is a url, use it directly
-        if r.model:
-            url = f"{api_base}/{r.model}"
+        if request.model:
+            url = f"{api_base}/{request.model}"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
@@ -268,45 +342,45 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         client = InferenceClient(url, token=api_key)
 
         # create stop sequences
-        if isinstance(r.stop, list):
-            stop = stop_sequences + r.stop
-        if isinstance(r.stop, str):
-            stop = stop_sequences + [r.stop]
+        if isinstance(request.stop, list):
+            stop = stop_sequences + request.stop
+        if isinstance(request.stop, str):
+            stop = stop_sequences + [request.stop]
         else:
             stop = stop_sequences
         logger.debug(f"Stop sequences:\n{stop}")
 
         # check if we can stream
-        if r.stream is True and r.n > 1:
+        if request.stream is True and request.n > 1:
             raise ValueError("Cannot stream more than one completion")
 
         # create generation parameters
-        if r.top_p == 0:
-            r.top_p = 2e-4
-        if r.top_p == 1:
-            r.top_p = 0.9999999
-        if r.temperature == 0:
-            r.temperature = 2e-4
+        if request.top_p == 0:
+            request.top_p = 2e-4
+        if request.top_p == 1:
+            request.top_p = 0.9999999
+        if request.temperature == 0:
+            request.temperature = 2e-4
 
         gen_kwargs = {
             "do_sample": True,
-            "return_full_text": True if r.echo else False,
-            "max_new_tokens": r.max_tokens,
-            "top_p": float(r.top_p),
-            "temperature": float(r.temperature),
+            "return_full_text": True if request.echo else False,
+            "max_new_tokens": request.max_tokens,
+            "top_p": float(request.top_p),
+            "temperature": float(request.temperature),
             "stop_sequences": stop,
-            "repetition_penalty": r.frequency_penalty,
-            "top_k": r.top_k,
+            "repetition_penalty": request.frequency_penalty,
+            "top_k": request.top_k,
             "seed": seed,
         }
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
-        if r.stream:
-            return stream_completion_request(client, prompt, stop, gen_kwargs, r.model)
+        if request.stream:
+            return stream_completion_request(client, prompt, stop, gen_kwargs, request.model)
         else:
             choices = []
             generated_tokens = 0
-            for _i in range(r.n):
+            for _i in range(request.n):
                 res = client.text_generation(
                     prompt,
                     details=True,
@@ -317,7 +391,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                     text=res.generated_text,
                     finish_reason=res.details.finish_reason.value,
                 )
-                if r.logprobs:
+                if request.logprobs:
                     parsed.logprobs = res.details.tokens
 
                 generated_tokens += res.details.generated_tokens
@@ -329,7 +403,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             total_tokens = prompt_tokens + generated_tokens
 
             return CompletionResponse(
-                model=r.model,
+                model=request.model,
                 choices=choices,
                 usage=Usage(
                     prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
@@ -346,29 +420,34 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
 
 class Embedding:
     @staticmethod
-    def create(**kwargs) -> Dict[str, Any]:
+    def create(
+        input: Union[str, List[Any]],
+        model: Optional[str] = None,
+        debug: bool = False,
+    ) -> Dict[str, Any]:
         """
         Creates a new embeddings for the provided prompt and parameters.
+
         Args:
-            param1 (int): The first parameter.
-            param2 (Optional[str]): The second parameter. Defaults to None.
+            input (`Union[str, List[Any]]`) document(s) to embed.
+            model (`str`, *optional*, defaults to None) The model to use for the completion. If not provided,
+                defaults to the base url.
+            debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
             Make sure to always use a prompt builder for your model.
         """
-        # deserialize the request
-        debug = kwargs.pop("debug", False)
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = EmbeddingsRequest(**kwargs)
+        request = EmbeddingsRequest(model=model, input=input)
 
         # if the model is a url, use it directly
-        if r.model:
+        if request.model:
             if api_base.endswith("/models"):
-                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{r.model}"
+                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{request.model}"
             else:
-                url = f"{api_base}/{r.model}"
+                url = f"{api_base}/{request.model}"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
@@ -378,9 +457,9 @@ class Embedding:
 
         # client is currently not supporting batched request thats why we run sequentially
         emb = []
-        res = client.post(json={"inputs": r.input, "model": r.model, "task": "feature-extraction"})
+        res = client.post(json={"inputs": request.input, "model": request.model, "task": "feature-extraction"})
         parsed_res = json.loads(res.decode())
-        if isinstance(r.input, list):
+        if isinstance(request.input, list):
             for idx, i in enumerate(parsed_res):
                 emb.append(EmbeddingsObjectResponse(index=idx, embedding=i))
         else:
@@ -388,12 +467,12 @@ class Embedding:
 
         if isinstance(res, list):
             # TODO: only approximating tokens
-            tokens = [int(len(i) / 4) for i in r.input]
+            tokens = [int(len(i) / 4) for i in request.input]
         else:
-            tokens = int(len(r.input) / 4)
+            tokens = int(len(request.input) / 4)
 
         return EmbeddingsResponse(
-            model=r.model,
+            model=request.model,
             data=emb,
             usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
         ).model_dump(exclude_none=True)
