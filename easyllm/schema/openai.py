@@ -33,7 +33,7 @@ class ChatCompletionResponse(BaseModel):
     id: str = Field(default_factory=lambda: f"hf-{generate(size=10)}")
     object: str = "chat.completion"
     created: int = Field(default_factory=lambda: int(time.time()))
-    model: str
+    model: Optional[str] = "custom"
     choices: List[ChatCompletionResponseChoice]
     usage: Usage
 
@@ -53,12 +53,12 @@ class ChatCompletionStreamResponse(BaseModel):
     id: str = Field(default_factory=lambda: f"hf-{generate(size=10)}")
     object: str = "chat.completion.chunk"
     created: int = Field(default_factory=lambda: int(time.time()))
-    model: str
+    model: Optional[str] = None
     choices: List[ChatCompletionResponseStreamChoice]
 
 
 class CompletionRequest(BaseModel):
-    model: str
+    model: Optional[str] = None
     prompt: Union[str, List[Any]]
     suffix: Optional[str] = None
     temperature: Optional[float] = 0.9
@@ -86,7 +86,7 @@ class CompletionResponse(BaseModel):
     id: str = Field(default_factory=lambda: f"hf-{generate(size=10)}")
     object: str = "text.completion"
     created: int = Field(default_factory=lambda: int(time.time()))
-    model: str
+    model: Optional[str] = "custom"
     choices: List[CompletionResponseChoice]
     usage: Usage
 
@@ -102,7 +102,7 @@ class CompletionStreamResponse(BaseModel):
     id: str = Field(default_factory=lambda: f"hf-{generate(size=10)}")
     object: str = "text.completion"
     created: int = Field(default_factory=lambda: int(time.time()))
-    model: str
+    model: Optional[str] = "custom"
     choices: List[CompletionResponseStreamChoice]
 
 
@@ -121,5 +121,5 @@ class EmbeddingsObjectResponse(BaseModel):
 class EmbeddingsResponse(BaseModel):
     object: str = "list"
     data: List[EmbeddingsObjectResponse]
-    model: str
+    model: Optional[str] = "custom"
     usage: Usage
