@@ -86,18 +86,19 @@ Migrating from OpenAI to HuggingFace is easy. Just change the import statement a
 ```diff
 - import openai
 + from easyllm.clients import huggingface
++ from easyllm.prompt_utils import build_llama2_prompt
 + huggingface.prompt_builder = build_llama2_prompt
 
 
 - response = openai.ChatCompletion.create(
 + response = huggingface.ChatCompletion.create(
--     model="gpt-3.5-turbo",
-+     model="meta-llama/Llama-2-70b-chat-hf",
-      messages=[
-          {"role": "system", "content": "You are a helpful assistant."},
-          {"role": "user", "content": "Knock knock."},
-      ],
-  )
+-    model="gpt-3.5-turbo",
++    model="meta-llama/Llama-2-70b-chat-hf",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Knock knock."},
+    ],
+)
 ```
 
 Make sure when you switch your client that your hyperparameters are still valid. For example, `temperature` of GPT-3 might be different than `temperature` of `Llama-2`.

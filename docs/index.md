@@ -78,13 +78,14 @@ Check out other examples:
 Migrating from OpenAI to HuggingFace is easy. Just change the import statement and the client you want to use and optionally the prompt builder.
 
 ```diff
--import openai
+- import openai
 + from easyllm.clients import huggingface
++ from easyllm.prompt_utils import build_llama2_prompt
 + huggingface.prompt_builder = build_llama2_prompt
 
 
--response = openai.ChatCompletion.create(
-+response = huggingface.ChatCompletion.create(
+- response = openai.ChatCompletion.create(
++ response = huggingface.ChatCompletion.create(
 -    model="gpt-3.5-turbo",
 +    model="meta-llama/Llama-2-70b-chat-hf",
     messages=[
