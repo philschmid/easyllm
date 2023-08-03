@@ -171,7 +171,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                 generated_tokens += res.details.generated_tokens
                 choices.append(parsed)
                 logger.debug(f"Response at index {_i}:\n{parsed}")
-            # calcuate usage details
+            # calculate usage details
             # TODO: fix when details is fixed
             prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens

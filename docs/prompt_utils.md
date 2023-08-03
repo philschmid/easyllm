@@ -1,6 +1,6 @@
 # Prompt utilities
 
-The `prompt_utils`  module contains functions to assist with converting Message's Dictonaries into prompts that can be used with `ChatCompletion` clients. 
+The `prompt_utils`  module contains functions to assist with converting Message's Dictionaries into prompts that can be used with `ChatCompletion` clients. 
 
 ## Llama 2 Chat builder 
 
