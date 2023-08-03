@@ -66,6 +66,7 @@ the result will look like
 ```
 
 Check out other examples:
+
 * [Detailed ChatCompletion Example](examples/chat-completion-api)
 * [Example how to stream chat requests](examples/stream-chat-completion)
 * [Example how to stream text requests](examples/stream-text-completion)
