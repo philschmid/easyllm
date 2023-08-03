@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'easyllm/**'
-      - 'tests/**'
   pull_request:
       paths:
       - 'easyllm/**'
