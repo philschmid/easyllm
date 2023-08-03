@@ -34,7 +34,7 @@ response = huggingface.ChatCompletion.create(
 
 Supported parameters are:
 
-* `model` - The model to use for the completion. If not provided, the defaults to base url.
+* `model` - The model to use for the completion. If not provided, defaults to the base url.
 * `messages` - `List[ChatMessage]` to use for the completion.
 * `temperature` - The temperature to use for the completion. Defaults to 0.9.
 * `top_p` - The top_p to use for the completion. Defaults to 0.6.
@@ -71,7 +71,7 @@ response = huggingface.Completion.create(
 
 Supported parameters are:
 
-* `model` - The model to use for the completion. If not provided, the defaults to base url.
+* `model` - The model to use for the completion. If not provided, defaults to the base url.
 * `prompt` -  Text to use for the completion, if prompt_builder is set, prompt will be formatted with the prompt_builder.
 * `temperature` - The temperature to use for the completion. Defaults to 0.9.
 * `top_p` - The top_p to use for the completion. Defaults to 0.6.
@@ -106,7 +106,7 @@ len(embedding["data"][0]["embedding"])
 
 Supported parameters are:
 
-* `model` - The model to use to create the embedding. If not provided, the defaults to base url.
+* `model` - The model to use to create the embedding. If not provided, defaults to the base url.
 * `input` -  `Union[str, List[str]]` document(s) to embed.
 
 
