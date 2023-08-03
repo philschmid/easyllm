@@ -418,29 +418,32 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
 
 class Embedding:
     @staticmethod
-    def create(**kwargs) -> Dict[str, Any]:
+    def create(
+        input: Union[str, List[Any]],
+        model: Optional[str] = None,
+        debug: bool = False,
+    ) -> Dict[str, Any]:
         """
         Creates a new embeddings for the provided prompt and parameters.
         Args:
-            param1 (int): The first parameter.
-            param2 (Optional[str]): The second parameter. Defaults to None.
+            input (`Union[str, List[Any]]`) document(s) to embed.
+            model (`str`, *optional*, defaults to None) The model to use for the completion.
+            debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
             Make sure to always use a prompt builder for your model.
         """
-        # deserialize the request
-        debug = kwargs.pop("debug", False)
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = EmbeddingsRequest(**kwargs)
+        request = EmbeddingsRequest(model=model, input=input)
 
         # if the model is a url, use it directly
-        if r.model:
+        if request.model:
             if api_base.endswith("/models"):
-                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{r.model}"
+                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{request.model}"
             else:
-                url = f"{api_base}/{r.model}"
+                url = f"{api_base}/{request.model}"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
@@ -450,9 +453,9 @@ class Embedding:
 
         # client is currently not supporting batched request thats why we run sequentially
         emb = []
-        res = client.post(json={"inputs": r.input, "model": r.model, "task": "feature-extraction"})
+        res = client.post(json={"inputs": request.input, "model": request.model, "task": "feature-extraction"})
         parsed_res = json.loads(res.decode())
-        if isinstance(r.input, list):
+        if isinstance(request.input, list):
             for idx, i in enumerate(parsed_res):
                 emb.append(EmbeddingsObjectResponse(index=idx, embedding=i))
         else:
@@ -460,12 +463,12 @@ class Embedding:
 
         if isinstance(res, list):
             # TODO: only approximating tokens
-            tokens = [int(len(i) / 4) for i in r.input]
+            tokens = [int(len(i) / 4) for i in request.input]
         else:
-            tokens = int(len(r.input) / 4)
+            tokens = int(len(request.input) / 4)
 
         return EmbeddingsResponse(
-            model=r.model,
+            model=request.model,
             data=emb,
             usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
         ).model_dump(exclude_none=True)
