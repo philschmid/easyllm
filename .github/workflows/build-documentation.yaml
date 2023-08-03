@@ -2,14 +2,11 @@ name: build documentation
 
 on:
   push:
-    branches:
+    pull_request:
       - main  
     paths:
       - 'docs/**'
       - 'notebooks/**'      
-  release:
-    types:
-      - created
   workflow_dispatch:
 
 concurrency:
