@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
@@ -78,22 +78,54 @@ def stream_chat_request(client, prompt, stop, gen_kwargs, model):
 
 class ChatCompletion:
     @staticmethod
-    def create(**kwargs) -> Dict[str, Any]:
+    def create(
+        messages: List[ChatMessage],
+        model: Optional[str] = None,
+        temperature: float = 0.9,
+        top_p: float = 0.6,
+        top_k: Optional[int] = 10,
+        n: int = 1,
+        max_tokens: int = 1024,
+        stop: Optional[List[str]] = None,
+        stream: bool = False,
+        frequency_penalty: Optional[float] = 1.0,
+        debug: bool = False,
+    ) -> Dict[str, Any]:
         """
         Creates a new chat completion for the provided messages and parameters.
+
         Args:
-            param1 (int): The first parameter.
-            param2 (Optional[str]): The second parameter. Defaults to None.
+            messages (`List[ChatMessage]`): to use for the completion.
+            model (`str`, *optional*): The model to use for the completion. If not provided, the defaults to base url.
+            temperature (`float`, defaults to 0.9): The temperature to use for the completion.
+            top_p (`float`, defaults to 0.6): The top_p to use for the completion.
+            top_k (`int`, *optional*, defaults to 10): The top_k to use for the completion.
+            n (`int`, defaults to 1): The number of completions to generate.
+            max_tokens (`int`, defaults to 1024): The maximum number of tokens to generate.
+            stop (`List[str]`, *optional*, defaults to None): The stop sequence(s) to use for the completion.
+            stream (`bool`, defaults to False): Whether to stream the completion.
+            frequency_penalty (`float`, *optional*, defaults to 1.0): The frequency penalty to use for the completion.
+            debug (`bool`, defaults to False): Whether to enable debug logging.
 
         Tip: Prompt builder
             Make sure to always use a prompt builder for your model.
         """
         # deserialize the request
-        debug = kwargs.pop("debug", False)
         if debug:
             logger.setLevel(logging.DEBUG)
 
-        r = ChatCompletionRequest(**kwargs)
+        r = ChatCompletionRequest(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            n=n,
+            max_tokens=max_tokens,
+            stop=stop,
+            stream=stream,
+            frequency_penalty=frequency_penalty,
+        )
 
         if prompt_builder is None:
             logging.warn(
