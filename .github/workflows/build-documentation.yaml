@@ -1,6 +1,12 @@
 name: Publish documentation
 
 on:
+  push:
+    branches:
+      - main  
+    paths:
+      - 'docs/**'
+      - 'notebooks/**'      
   release:
     types:
       - created
@@ -32,5 +38,5 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install ".[docs]"
-      - name: publish documentation
-        run: make docs-deploy
+      - name: build documentation
+        run: make docs

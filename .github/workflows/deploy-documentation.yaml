@@ -1,21 +1,26 @@
-name: Unit Tests
+name: Publish documentation
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'easyllm/**'
-      - 'tests/**'
-  pull_request:
+      - 'docs/**'
+      - 'notebooks/**'
+  release:
+    types:
+      - created
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
-  quality:
+  documentation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,9 +34,9 @@ jobs:
         id: cache
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-test
-      - name: Install build dependencies
+          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-docs
+      - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pip install ".[test]"
-      - name: Run tests
-        run: pytest
+        run: pip install ".[docs]"
+      - name: publish documentation
+        run: make docs-deploy
