@@ -114,6 +114,8 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         if r.model:
             url = f"{api_base}/{r.model}"
             logger.debug(f"Url:\n{url}")
+        else:
+            url = api_base
 
         # create the client
         client = InferenceClient(url, token=api_key)
@@ -259,6 +261,8 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         if r.model:
             url = f"{api_base}/{r.model}"
             logger.debug(f"Url:\n{url}")
+        else:
+            url = api_base
 
         # create the client
         client = InferenceClient(url, token=api_key)
@@ -366,6 +370,8 @@ class Embedding:
             else:
                 url = f"{api_base}/{r.model}"
             logger.debug(f"Url:\n{url}")
+        else:
+            url = api_base
 
         # create the client
         client = InferenceClient(url, token=api_key)
