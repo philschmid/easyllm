@@ -37,9 +37,9 @@ response = huggingface.ChatCompletion.create(
         {"role": "system", "content": "\nYou are a helpful assistant speaking like a pirate. argh!"},
         {"role": "user", "content": "What is the sun?"},
     ],
-      temperature=0.9,
-      top_p=0.6,
-      max_tokens=256,
+    temperature=0.9,
+    top_p=0.6,
+    max_tokens=256,
 )
 
 print(response)
@@ -84,20 +84,20 @@ See the [documentation](https://philschmid.github.io/easyllm/) for more detailed
 Migrating from OpenAI to HuggingFace is easy. Just change the import statement and the client you want to use and optionally the prompt builder.
 
 ```diff
--import openai
+- import openai
 + from easyllm.clients import huggingface
 + huggingface.prompt_builder = build_llama2_prompt
 
 
--response = openai.ChatCompletion.create(
-+response = huggingface.ChatCompletion.create(
--    model="gpt-3.5-turbo",
-+    model="meta-llama/Llama-2-70b-chat-hf",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Knock knock."},
-    ],
-)
+- response = openai.ChatCompletion.create(
++ response = huggingface.ChatCompletion.create(
+-     model="gpt-3.5-turbo",
++     model="meta-llama/Llama-2-70b-chat-hf",
+      messages=[
+          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "user", "content": "Knock knock."},
+      ],
+  )
 ```
 
 Make sure when you switch your client that your hyperparameters are still valid. For example, `temperature` of GPT-3 might be different than `temperature` of `Llama-2`.
