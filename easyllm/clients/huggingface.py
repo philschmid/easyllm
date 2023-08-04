@@ -323,14 +323,14 @@ class Completion:
         if prompt_builder is None:
             logging.warn(
                 f"""huggingface.prompt_builder is not set.
-Using default prompt builder for. Prompt sent to model will be:
+Using input as prompt builder. Prompt sent to model will be:
 ----------------------------------------
-{buildBasePrompt(request.prompt)}.
+{request.prompt}.
 ----------------------------------------
 If you want to use a custom prompt builder, set huggingface.prompt_builder to a function that takes a list of messages and returns a string.
 You can also use existing prompt builders by importing them from easyllm.prompt_utils"""
             )
-            prompt = buildBasePrompt(request.prompt)
+            prompt = request.prompt
         else:
             prompt = build_prompt(request.prompt, prompt_builder)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
