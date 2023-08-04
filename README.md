@@ -1,5 +1,24 @@
 # EasyLLM - 
 
+<div align="center">
+	<a  href="https://pypi.org/project/easyllm" target="_blank">
+		<img src="https://img.shields.io/pypi/v/easyllm.svg" />
+	</a>
+	<a  href="https://pypi.org/project/easyllm" target="_blank">
+		<img src="https://img.shields.io/pypi/pyversions/easyllm" />
+	</a>
+	<a  href="https://github.com/philschmid/easyllm/blob/main/LICENSE" target="_blank">
+		<img src="https://img.shields.io/pypi/l/easyllm" />
+	</a>
+	<a  href="https://github.com/philschmid/easyllm/actions?workflow=Unit Tests" target="_blank">
+		<img src="https://github.com/philschmid/easyllm/workflows/Unit Tests/badge.svg" />
+	</a>
+  <a  href="https://github.com/pypa/hatch" target="_blank">
+		<img src="https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg" />
+	</a>
+</div>
+
+
 EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. Get immediataly started or check out the [documentation](https://philschmid.github.io/easyllm/).
 
 EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion`, `openai.Completion`, `openai.Embedding` with, for example, `huggingface.ChatCompletion`, `huggingface.Completion` or `huggingface.Embedding` by changing one line of code.
@@ -114,6 +133,18 @@ Make sure when you switch your client that your hyperparameters are still valid.
 - `evol_instruct` (work in progress) - Use evolutionary algorithms create instructions for LLMs.
 
 - `prompt_utils` - Helper methods to easily convert between prompt formats like OpenAI Messages to prompts for open source models like Llama 2.
+
+## 🙏 Contributing
+
+EasyLLM is an open source project and welcomes contributions of all kinds.
+
+The project uses [hatch](https://hatch.pypa.io/latest/) for development. To get started, fork the repository and clone 
+it to your local machine.
+
+0. Confirm [hatch](https://hatch.pypa.io/latest/install/) is installed (pipx is great to make it available globally on your machine)
+1. Once in the project directory, run `hatch env create` to create a default virtual environment for development.
+2. Activate the virtual environment with `hatch shell`
+3. Start developing! 🤩
 
 ## 📔 Citation & Acknowledgements
 
