@@ -1,4 +1,4 @@
-# EasyLLM - 
+<h1 align="center">EasyLLM - </h1>
 
 <div align="center">
 	<a  href="https://pypi.org/project/easyllm" target="_blank">
@@ -19,9 +19,9 @@
 </div>
 
 
-EasyLLM is an open source project that provides helpful tools and methods for working with large language models (LLMs), both open source and closed source. Get immediataly started or check out the [documentation](https://philschmid.github.io/easyllm/).
+**EasyLLM** is an open source project that provides **helpful tools and methods for working with large language models** (LLMs), both open source and closed source. Get immediataly started or check out the [documentation](https://philschmid.github.io/easyllm/).
 
-EasyLLM implements clients that are compatible with OpenAI's Completion API. This means you can easily replace `openai.ChatCompletion`, `openai.Completion`, `openai.Embedding` with, for example, `huggingface.ChatCompletion`, `huggingface.Completion` or `huggingface.Embedding` by changing one line of code.
+EasyLLM implements clients that are **compatible with OpenAI's Completion API**. This means you can easily replace `openai.ChatCompletion`, `openai.Completion`, `openai.Embedding` with, for example, `huggingface.ChatCompletion`, `huggingface.Completion` or `huggingface.Embedding` by changing one line of code.
 
 ### Supported Clients 
 
