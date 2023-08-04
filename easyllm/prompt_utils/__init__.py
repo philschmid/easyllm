@@ -9,3 +9,13 @@ from .open_assistant import build_open_assistant_prompt, open_assistant_stop_seq
 from .stablebeluga import build_stablebeluga_prompt, stablebeluga_stop_sequences
 from .vicuna import build_vicuna_prompt, vicuna_stop_sequences
 from .wizardlm import build_wizardlm_prompt, wizardlm_stop_sequences
+
+PROMPT_MAPPING = {
+    "chatml_falcon": build_chatml_falcon_prompt,
+    "chatml_starchat": build_chatml_starchat_prompt,
+    "llama2": build_llama2_prompt,
+    "open_assistant": build_open_assistant_prompt,
+    "stablebeluga": build_stablebeluga_prompt,
+    "vicuna": build_vicuna_prompt,
+    "wizardlm": build_wizardlm_prompt,
+}

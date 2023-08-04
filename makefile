@@ -17,6 +17,10 @@ docs:
 	$(MAKE) copy-docs
 	mkdocs serve
 
+docs-build:
+	$(MAKE) copy-docs
+	mkdocs build
+
 docs-deploy:
 	$(MAKE) copy-docs
 	mkdocs gh-deploy --force

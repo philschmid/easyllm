@@ -36,4 +36,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install ".[docs]"
       - name: build documentation
-        run: make docs
+        run: make docs-build

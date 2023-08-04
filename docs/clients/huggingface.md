@@ -13,11 +13,10 @@ The `huggingface.ChatCompletion` client is used to interface with HuggingFace mo
 
 ```python
 from easyllm.clients import huggingface
-from easyllm.prompt_utils import build_llama2_prompt
 
 # The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
 # huggingface.api_key="hf_xxx"
-hubbingface.prompt_builder = build_llama2_prompt
+hubbingface.prompt_builder = "llama2"
 
 response = huggingface.ChatCompletion.create(
     model="meta-llama/Llama-2-70b-chat-hf",
@@ -53,11 +52,10 @@ The `huggingface.Completion` client is used to interface with HuggingFace models
 
 ```python
 from easyllm.clients import huggingface
-from easyllm.prompt_utils import build_llama2_prompt
 
 # The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
 # huggingface.api_key="hf_xxx"
-hubbingface.prompt_builder = build_llama2_prompt
+hubbingface.prompt_builder = "llama2"
 
 response = huggingface.Completion.create(
     model="meta-llama/Llama-2-70b-chat-hf",
@@ -120,6 +118,9 @@ By default the `huggingface` client will try to read the `HUGGINGFACE_TOKEN` env
 
 Alternatively you can set the token manually by setting `huggingface.api_key`.
 
+
+manually setting the api key:
+
 ```python
 from easyllm.clients import huggingface
 
@@ -128,13 +129,24 @@ huggingface.api_key="hf_xxx"
 res = huggingface.ChatCompletion.create(...)
 ```
 
+Using environment variable:
+
+```python
+# can happen elsehwere
+import os
+os.environ["HUGGINGFACE_TOKEN"] = "hf_xxx"
+
+from easyllm.clients import huggingface
+```
+
+
 ### Changing url 
 
 By default the `huggingface` client will try to read the `HUGGINGFACE_API_BASE` environment variable. If this is not set, it will use the default url `https://api-inference.huggingface.co/models`. This is helpful if you want to use a different url like `https://zj5lt7pmzqzbp0d1.us-east-1.aws.endpoints.huggingface.cloud` or a local url like `http://localhost:8000` or an Hugging Face Inference Endpoint.
 
 Alternatively you can set the url manually by setting `huggingface.api_base`. If you set a custom you have to leave the `model` parameter empty. 
 
-
+manually setting the api base:
 
 ```python
 from easyllm.clients import huggingface
@@ -145,19 +157,43 @@ huggingface.api_base="https://my-url"
 res = huggingface.ChatCompletion.create(...)
 ```
 
+Using environment variable:
+
+```python
+# can happen elsehwere
+import os
+os.environ["HUGGINGFACE_API_BASE"] = "https://my-url"
+
+from easyllm.clients import huggingface
+```
+
+
+
+
 ### Build Prompt
 
-prompt_builder = None
-
-By default the `huggingface` client has no `prompt_builder` set. If you want to use the `prompt_builder` you have to set it manually. If you don't set it, the client will use the default.
+By default the `huggingface` client will try to read the `HUGGINGFACE_PROMPT` environment variable and tries to map the value to the `PROMPT_MAPPING` dictionary. If this is not set, it will use the default prompt builder. 
+You can also set it manually.
 
 Checkout the [Prompt Utils](../prompt_utils) for more details.
 
+
+manually setting the prompt builder:
+
 ```python
 from easyllm.clients import huggingface
-from easyllm.prompt_utils import build_llama2_prompt
 
-huggingface.prompt_builder = build_llama2_prompt
+huggingface.prompt_builder = "llama2"
 
 res = huggingface.ChatCompletion.create(...)
+```
+
+Using environment variable:
+
+```python
+# can happen elsehwere
+import os
+os.environ["HUGGINGFACE_PROMPT"] = "llama2"
+
+from easyllm.clients import huggingface
 ```
