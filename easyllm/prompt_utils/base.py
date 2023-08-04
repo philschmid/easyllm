@@ -1,6 +1,6 @@
 from typing import List, Union
-from easyllm.prompt_utils import PROMPT_MAPPING
 
+from easyllm.prompt_utils import PROMPT_MAPPING
 from easyllm.schema.base import ChatMessage
 from easyllm.utils import logger
 

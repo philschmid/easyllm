@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional, Union
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
-from easyllm.prompt_utils import PROMPT_MAPPING
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
 from easyllm.schema.base import ChatMessage, Usage
