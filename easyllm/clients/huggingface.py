@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
 
-from easyllm.prompt_utils.base import buildBasePrompt
+from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
 from easyllm.schema.base import ChatMessage, Usage
 from easyllm.schema.openai import (
     ChatCompletionRequest,
@@ -28,10 +28,15 @@ from easyllm.utils import logger
 
 # default parameters
 api_type = "huggingface"
-api_key = os.getenv("HUGGINGFACE_TOKEN") or HfFolder.get_token()
-api_base = os.getenv("HUGGINGFACE_API_BASE") or "https://api-inference.huggingface.co/models"
-api_version = os.getenv("HUGGINGFACE_API_VERSION") or "2023-07-29"
-prompt_builder = None
+api_key = (
+    os.environ.get(
+        "HUGGINGFACE_TOKEN",
+    )
+    or HfFolder.get_token()
+)
+api_base = os.environ.get("HUGGINGFACE_API_BASE", None) or "https://api-inference.huggingface.co/models"
+api_version = os.environ.get("HUGGINGFACE_API_VERSION", None) or "2023-07-29"
+prompt_builder = os.environ.get("HUGGINGFACE_PROMPT", None)
 stop_sequences = []
 seed = 42
 
@@ -128,7 +133,7 @@ class ChatCompletion:
         )
 
         if prompt_builder is None:
-            logging.warn(
+            logger.warn(
                 f"""huggingface.prompt_builder is not set.
 Using default prompt builder for. Prompt sent to model will be:
 ----------------------------------------
@@ -139,8 +144,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             )
             prompt = buildBasePrompt(request.messages)
         else:
-            prompt = prompt_builder(request.messages)
-        logger.debug(f"Prompt sent to model will be:\n{prompt}")
+            prompt = build_prompt(request.messages, prompt_builder)
 
         # if the model is a url, use it directly
         if request.model:
@@ -328,7 +332,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             )
             prompt = buildBasePrompt(request.prompt)
         else:
-            prompt = prompt_builder(request.prompt)
+            prompt = build_prompt(request.prompt, prompt_builder)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
 
         # if the model is a url, use it directly

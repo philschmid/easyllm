@@ -11,14 +11,26 @@ Supported prompt formats:
 * [StableBeluga2](#stablebeluga2-chat-builder)
 * [Open Assistant](#open-assistant-chat-builder)
 
+Prompt utils are also exporting a mapping dictionary `PROMPT_MAPPING` that maps a model name to a prompt builder function. This can be used to select the correct prompt builder function via an environment variable. 
+
+```python
+PROMPT_MAPPING = {
+    "chatml_falcon": build_chatml_falcon_prompt,
+    "chatml_starchat": build_chatml_starchat_prompt,
+    "llama2": build_llama2_prompt,
+    "open_assistant": build_open_assistant_prompt,
+    "stablebeluga": build_stablebeluga_prompt,
+    "vicuna": build_vicuna_prompt,
+    "wizardlm": build_wizardlm_prompt,
+}
+```
 
 ## Set prompt builder for client
 
 ```python
 from easyllm.clients import huggingface
-from easyllm.prompt_utils import build_llama2_prompt
 
-huggingface.prompt_builder = build_llama2_prompt
+huggingface.prompt_builder = "llama2" # vicuna, chatml_falcon, chatml_starchat, wizardlm, stablebeluga, open_assistant
 ```
 
 ## Llama 2 Chat builder 
