@@ -333,7 +333,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             )
             prompt = buildBasePrompt(request.prompt)
         else:
-            prompt = build_prompt(request.messages, prompt_builder)
+            prompt = build_prompt(request.prompt, prompt_builder)
         logger.debug(f"Prompt sent to model will be:\n{prompt}")
 
         # if the model is a url, use it directly
