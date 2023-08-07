@@ -23,7 +23,7 @@ def build_llama2_prompt(messages: Union[List[ChatMessage], str]) -> str:
         if message.role == "user":
             conversation.append(message.content.strip())
         elif message.role == "assistant":
-            conversation.append(f" [/INST] {message.content}</s><s>[INST] ")
+            conversation.append(f" [/INST] {message.content} </s><s>[INST] ")
         elif message.role == "function":
             raise ValueError("Llama 2 does not support function calls.")
         elif message.role == "system" and index == 0:
