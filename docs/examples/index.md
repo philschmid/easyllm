@@ -12,5 +12,6 @@ Here are some examples to help you get started with the easyllm library:
 | [Detailed Completion Example](text-completion-api)                      | Uses the TextCompletion API to generate text with the model.                          |
 | [Create Embeddings](get-embeddings)                                     | Embeds text into vector representations using the model.                              |
 | [Hugging Face Inference Endpoints Example](inference-endpoints-example) | Example on how to use custom endpoints, e.g. Inference Endpoints or localhost.        |
+| [Retrieval Augmented Generation using Llama 2](llama2-rag-example)      | Example on how to use Llama 2 70B for in-context retrival augmentation                |
 
 The examples cover the main functionality of the library - chat, text completion, and embeddings. Let me know if you would like me to modify or expand the index page in any way.
