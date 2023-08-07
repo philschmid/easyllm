@@ -125,3 +125,4 @@ nav:
       - examples/stream-text-completions.ipynb
       - examples/get-embeddings.ipynb
       - examples/inference-endpoints-example.ipynb
+      - examples/llama2-rag-example.ipynb
