@@ -126,3 +126,4 @@ nav:
       - examples/get-embeddings.ipynb
       - examples/inference-endpoints-example.ipynb
       - examples/llama2-rag-example.ipynb
+      - examples/llama2-agent-example.ipynb
