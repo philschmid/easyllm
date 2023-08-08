@@ -159,7 +159,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         # create stop sequences
         if isinstance(request.stop, list):
             stop = stop_sequences + request.stop
-        if isinstance(request.stop, str):
+        elif isinstance(request.stop, str):
             stop = stop_sequences + [request.stop]
         else:
             stop = stop_sequences
@@ -348,7 +348,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         # create stop sequences
         if isinstance(request.stop, list):
             stop = stop_sequences + request.stop
-        if isinstance(request.stop, str):
+        elif isinstance(request.stop, str):
             stop = stop_sequences + [request.stop]
         else:
             stop = stop_sequences
