@@ -1,3 +1,4 @@
+import importlib.metadata
 import json
 import logging
 import os
@@ -5,6 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
+from packaging.version import parse
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
 from easyllm.schema.base import ChatMessage, Usage
@@ -50,11 +52,13 @@ def stream_chat_request(client, prompt, stop, gen_kwargs, model):
         details=True,
         **gen_kwargs,
     )
-    yield ChatCompletionStreamResponse(
-        id=id,
-        model=model,
-        choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(role="assistant"))],
-    ).model_dump(exclude_none=True)
+    yield dump_object(
+        ChatCompletionStreamResponse(
+            id=id,
+            model=model,
+            choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(role="assistant"))],
+        )
+    )
     # yield each generated token
     reason = None
     for _idx, chunk in enumerate(res):
@@ -69,16 +73,20 @@ def stream_chat_request(client, prompt, stop, gen_kwargs, model):
             # set reason to finish reason
             reason = chunk.details.finish_reason
         # yield the generated token
-        yield ChatCompletionStreamResponse(
+        yield dump_object(
+            ChatCompletionStreamResponse(
+                id=id,
+                model=model,
+                choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(content=chunk.token.text))],
+            )
+        )
+    yield dump_object(
+        ChatCompletionStreamResponse(
             id=id,
             model=model,
-            choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(content=chunk.token.text))],
-        ).model_dump(exclude_none=True)
-    yield ChatCompletionStreamResponse(
-        id=id,
-        model=model,
-        choices=[ChatCompletionResponseStreamChoice(index=0, finish_reason=reason, delta={})],
-    ).model_dump(exclude_none=True)
+            choices=[ChatCompletionResponseStreamChoice(index=0, finish_reason=reason, delta={})],
+        )
+    )
 
 
 class ChatCompletion:
@@ -214,13 +222,15 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens
 
-            return ChatCompletionResponse(
-                model=request.model,
-                choices=choices,
-                usage=Usage(
-                    prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
-                ),
-            ).model_dump(exclude_none=True)
+            return dump_object(
+                ChatCompletionResponse(
+                    model=request.model,
+                    choices=choices,
+                    usage=Usage(
+                        prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
+                    ),
+                )
+            )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
@@ -248,11 +258,13 @@ def stream_completion_request(client, prompt, stop, gen_kwargs, model):
         if chunk.token.text in stop:
             break
         # yield the generated token
-        yield CompletionStreamResponse(
-            id=id,
-            model=model,
-            choices=[CompletionResponseStreamChoice(index=0, text=chunk.token.text, logprobs=chunk.token.logprob)],
-        ).model_dump(exclude_none=True)
+        yield dump_object(
+            CompletionStreamResponse(
+                id=id,
+                model=model,
+                choices=[CompletionResponseStreamChoice(index=0, text=chunk.token.text, logprobs=chunk.token.logprob)],
+            )
+        )
 
 
 class Completion:
@@ -406,13 +418,15 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens
 
-            return CompletionResponse(
-                model=request.model,
-                choices=choices,
-                usage=Usage(
-                    prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
-                ),
-            ).model_dump(exclude_none=True)
+            return dump_object(
+                CompletionResponse(
+                    model=request.model,
+                    choices=choices,
+                    usage=Usage(
+                        prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
+                    ),
+                )
+            )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
@@ -475,11 +489,13 @@ class Embedding:
         else:
             tokens = int(len(request.input) / 4)
 
-        return EmbeddingsResponse(
-            model=request.model,
-            data=emb,
-            usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
-        ).model_dump(exclude_none=True)
+        return dump_object(
+            EmbeddingsResponse(
+                model=request.model,
+                data=emb,
+                usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
+            )
+        )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
@@ -487,3 +503,10 @@ class Embedding:
         Creates a new chat completion for the provided messages and parameters.
         """
         raise NotImplementedError("ChatCompletion.acreate is not implemented")
+
+
+def dump_object(object):
+    if parse(importlib.metadata.version("pydantic")) < parse("2.0.0"):
+        return object.dict()
+    else:
+        return object.model_dump(exclude_none=True)
