@@ -1,4 +1,4 @@
 # SPDX-FileCopyrightText: 2023-present philschmid <schmidphilipp1995@gmail.com>
 #
 # SPDX-License-Identifier: MIT
-__version__ = "0.4.0"
+__version__ = "0.5.0.dev0"
