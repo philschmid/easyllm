@@ -16,7 +16,9 @@ try:
 except ImportError:
     boto3 = None
 
-from easyllm.utils import logger
+from easyllm.utils.logging import setup_logger
+
+logger = setup_logger()
 
 # aws sigv4 version
 __version__ = "0.8"

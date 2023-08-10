@@ -17,7 +17,9 @@ from easyllm.schema.openai import (
     EmbeddingsRequest,
     EmbeddingsResponse,
 )
-from easyllm.utils import AWSSigV4, logger
+from easyllm.utils import AWSSigV4, setup_logger
+
+logger = setup_logger()
 
 # default parameters
 api_type = "sagemaker"
@@ -131,13 +133,6 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             raise ValueError("Cannot stream more than one completion")
 
         # create generation parameters
-        if request.top_p == 0:
-            request.top_p = 2e-4
-        if request.top_p == 1:
-            request.top_p = 0.9999999
-        if request.temperature == 0:
-            request.temperature = 2e-4
-
         gen_kwargs = {
             "do_sample": True,
             "return_full_text": False,
@@ -149,6 +144,13 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             "top_k": request.top_k,
             "seed": seed,
         }
+        if request.top_p == 0:
+            gen_kwargs.pop("top_p")
+        if request.top_p == 1:
+            request.top_p = 0.9999999
+        if request.temperature == 0:
+            gen_kwargs.pop("temperature")
+            gen_kwargs["do_sample"] = False
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
         if request.stream:
@@ -311,14 +313,6 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         if request.stream is True and request.n > 1:
             raise ValueError("Cannot stream more than one completion")
 
-        # create generation parameters
-        if request.top_p == 0:
-            request.top_p = 2e-4
-        if request.top_p == 1:
-            request.top_p = 0.9999999
-        if request.temperature == 0:
-            request.temperature = 2e-4
-
         gen_kwargs = {
             "do_sample": True,
             "return_full_text": True if request.echo else False,
@@ -330,6 +324,14 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             "top_k": request.top_k,
             "seed": seed,
         }
+        if request.top_p == 0:
+            gen_kwargs.pop("top_p")
+        if request.top_p == 1:
+            request.top_p = 0.9999999
+        if request.temperature == 0:
+            gen_kwargs.pop("temperature")
+            gen_kwargs["do_sample"] = False
+
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
         if request.stream:

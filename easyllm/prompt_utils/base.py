@@ -2,7 +2,9 @@ from typing import List, Union
 
 from easyllm.prompt_utils import PROMPT_MAPPING
 from easyllm.schema.base import ChatMessage
-from easyllm.utils import logger
+from easyllm.utils import setup_logger
+
+logger = setup_logger()
 
 
 def buildBasePrompt(messages: List[ChatMessage]) -> str:
