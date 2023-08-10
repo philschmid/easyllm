@@ -9,7 +9,7 @@ from nanoid import generate
 from packaging.version import parse
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
-from easyllm.schema.base import ChatMessage, Usage, dump_object
+from easyllm.schema.base import ChatMessage, Usage, dump_object # noqa: F811
 from easyllm.schema.openai import (
     ChatCompletionRequest,
     ChatCompletionResponse,
