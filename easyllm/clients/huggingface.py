@@ -1,4 +1,3 @@
-import importlib.metadata
 import json
 import logging
 import os
@@ -6,10 +5,9 @@ from typing import Any, Dict, List, Optional, Union
 
 from huggingface_hub import HfFolder, InferenceClient
 from nanoid import generate
-from packaging.version import parse
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
-from easyllm.schema.base import ChatMessage, Usage, dump_object # noqa: F811
+from easyllm.schema.base import ChatMessage, Usage, dump_object
 from easyllm.schema.openai import (
     ChatCompletionRequest,
     ChatCompletionResponse,
@@ -505,10 +503,3 @@ class Embedding:
         Creates a new chat completion for the provided messages and parameters.
         """
         raise NotImplementedError("ChatCompletion.acreate is not implemented")
-
-
-def dump_object(object):
-    if parse(importlib.metadata.version("pydantic")) < parse("2.0.0"):
-        return object.dict()
-    else:
-        return object.model_dump(exclude_none=True)
