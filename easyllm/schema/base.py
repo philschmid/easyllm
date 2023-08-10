@@ -1,7 +1,8 @@
+import importlib.metadata
 from typing import Literal, Optional
+
 from packaging.version import parse
 from pydantic import BaseModel
-import importlib.metadata
 
 
 def dump_object(object):
