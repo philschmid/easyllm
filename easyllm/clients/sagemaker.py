@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 import requests
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
-from easyllm.schema.base import ChatMessage, Usage
+from easyllm.schema.base import ChatMessage, Usage, dump_object
 from easyllm.schema.openai import (
     ChatCompletionRequest,
     ChatCompletionResponse,
@@ -188,13 +188,15 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens
 
-            return ChatCompletionResponse(
-                model=request.model,
-                choices=choices,
-                usage=Usage(
-                    prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
-                ),
-            ).model_dump(exclude_none=True)
+            return dump_object(
+                ChatCompletionResponse(
+                    model=request.model,
+                    choices=choices,
+                    usage=Usage(
+                        prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
+                    ),
+                )
+            )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
@@ -369,13 +371,15 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             prompt_tokens = int(len(prompt) / 4)
             total_tokens = prompt_tokens + generated_tokens
 
-            return CompletionResponse(
-                model=request.model,
-                choices=choices,
-                usage=Usage(
-                    prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
-                ),
-            ).model_dump(exclude_none=True)
+            return dump_object(
+                CompletionResponse(
+                    model=request.model,
+                    choices=choices,
+                    usage=Usage(
+                        prompt_tokens=prompt_tokens, completion_tokens=generated_tokens, total_tokens=total_tokens
+                    ),
+                )
+            )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
@@ -439,11 +443,13 @@ class Embedding:
         else:
             tokens = int(len(request.input) / 4)
 
-        return EmbeddingsResponse(
-            model=request.model,
-            data=emb,
-            usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
-        ).model_dump(exclude_none=True)
+        return dump_object(
+            EmbeddingsResponse(
+                model=request.model,
+                data=emb,
+                usage=Usage(prompt_tokens=tokens, total_tokens=tokens),
+            )
+        )
 
     @classmethod
     async def acreate(cls, *args, **kwargs):
