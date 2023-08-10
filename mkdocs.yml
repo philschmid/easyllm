@@ -115,6 +115,7 @@ nav:
       - "Clients":
         - clients/index.md
         - clients/huggingface.md
+        - clients/sagemaker.md
       - prompt_utils.md
   - Examples:
     - examples/index.md
@@ -127,3 +128,7 @@ nav:
       - examples/inference-endpoints-example.ipynb
       - examples/llama2-rag-example.ipynb
       - examples/llama2-agent-example.ipynb
+    - "Amazon SageMaker":
+      - examples/sagemaker-chat-completion-api.ipynb
+      - examples/sagemaker-text-completion-api.ipynb
+      - examples/sagemaker-get-embeddings.ipynb

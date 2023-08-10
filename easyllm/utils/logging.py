@@ -29,6 +29,3 @@ def setup_logger() -> logging.Logger:
         # datasets_logging.set_verbosity(log_level)
         # trfs_logging.set_verbosity(log_level)
         return logger
-
-
-logger = setup_logger()

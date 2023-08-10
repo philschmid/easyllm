@@ -16,7 +16,7 @@ from easyllm.clients import huggingface
 
 # The module automatically loads the HuggingFace API key from the environment variable HUGGINGFACE_TOKEN or from the HuggingFace CLI configuration file.
 # huggingface.api_key="hf_xxx"
-hubbingface.prompt_builder = "llama2"
+huggingface.prompt_builder = "llama2"
 
 response = huggingface.ChatCompletion.create(
     model="meta-llama/Llama-2-70b-chat-hf",

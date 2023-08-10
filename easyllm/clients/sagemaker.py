@@ -1,12 +1,8 @@
-import importlib.metadata
-import json
 import logging
 import os
 from typing import Any, Dict, List, Optional, Union
 
-from huggingface_hub import HfFolder, InferenceClient
-from nanoid import generate
-from packaging.version import parse
+import requests
 
 from easyllm.prompt_utils.base import build_prompt, buildBasePrompt
 from easyllm.schema.base import ChatMessage, Usage, dump_object
@@ -14,32 +10,33 @@ from easyllm.schema.openai import (
     ChatCompletionRequest,
     ChatCompletionResponse,
     ChatCompletionResponseChoice,
-    ChatCompletionResponseStreamChoice,
-    ChatCompletionStreamResponse,
     CompletionRequest,
     CompletionResponse,
     CompletionResponseChoice,
-    CompletionResponseStreamChoice,
-    CompletionStreamResponse,
-    DeltaMessage,
     EmbeddingsObjectResponse,
     EmbeddingsRequest,
     EmbeddingsResponse,
 )
-from easyllm.utils import setup_logger
+from easyllm.utils import AWSSigV4, setup_logger
 
 logger = setup_logger()
 
 # default parameters
-api_type = "huggingface"
-api_key = (
-    os.environ.get(
-        "HUGGINGFACE_TOKEN",
-    )
-    or HfFolder.get_token()
+api_type = "sagemaker"
+api_aws_access_key = os.environ.get("AWS_ACCESS_KEY_ID", None)
+api_aws_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY", None)
+api_aws_session_token = os.environ.get("AWS_SESSION_TOKEN", None)
+
+aws_auth = AWSSigV4(
+    "sagemaker",
+    aws_access_key_id=api_aws_access_key,
+    aws_secret_access_key=api_aws_secret_key,
+    aws_session_token=api_aws_session_token,
 )
-api_base = os.environ.get("HUGGINGFACE_API_BASE", None) or "https://api-inference.huggingface.co/models"
-api_version = os.environ.get("HUGGINGFACE_API_VERSION", None) or "2023-07-29"
+
+api_base = f"https://runtime.sagemaker.{aws_auth.region}.amazonaws.com/endpoints"
+
+api_version = os.environ.get("SAGEMAKER_API_VERSION", None) or "2023-07-29"
 prompt_builder = os.environ.get("HUGGINGFACE_PROMPT", None)
 stop_sequences = []
 seed = 42
@@ -47,48 +44,7 @@ seed = 42
 
 def stream_chat_request(client, prompt, stop, gen_kwargs, model):
     """Utility function for streaming chat requests."""
-    id = f"hf-{generate(size=10)}"
-    res = client.text_generation(
-        prompt,
-        stream=True,
-        details=True,
-        **gen_kwargs,
-    )
-    yield dump_object(
-        ChatCompletionStreamResponse(
-            id=id,
-            model=model,
-            choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(role="assistant"))],
-        )
-    )
-    # yield each generated token
-    reason = None
-    for _idx, chunk in enumerate(res):
-        # skip special tokens
-        if chunk.token.special:
-            continue
-        # stop if we encounter a stop sequence
-        if chunk.token.text in stop:
-            break
-        # check if details is not none and if finish_reason key in details is not none
-        if chunk.details is not None and chunk.details.finish_reason is not None:
-            # set reason to finish reason
-            reason = chunk.details.finish_reason
-        # yield the generated token
-        yield dump_object(
-            ChatCompletionStreamResponse(
-                id=id,
-                model=model,
-                choices=[ChatCompletionResponseStreamChoice(index=0, delta=DeltaMessage(content=chunk.token.text))],
-            )
-        )
-    yield dump_object(
-        ChatCompletionStreamResponse(
-            id=id,
-            model=model,
-            choices=[ChatCompletionResponseStreamChoice(index=0, finish_reason=reason, delta={})],
-        )
-    )
+    raise NotImplementedError("SageMaker is not yet supporting streaming requests")
 
 
 class ChatCompletion:
@@ -158,13 +114,10 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
 
         # if the model is a url, use it directly
         if request.model:
-            url = f"{api_base}/{request.model}"
+            url = f"{api_base}/{request.model}/invocations"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
-
-        # create the client
-        client = InferenceClient(url, token=api_key)
 
         # create stop sequences
         if isinstance(request.stop, list):
@@ -201,22 +154,35 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
         if request.stream:
-            return stream_chat_request(client, prompt, stop, gen_kwargs, request.model)
+            return stream_chat_request(url, prompt, stop, gen_kwargs, request.model)
         else:
             choices = []
             generated_tokens = 0
             for _i in range(request.n):
-                res = client.text_generation(
-                    prompt,
-                    details=True,
-                    **gen_kwargs,
+                res = requests.request(
+                    "POST",
+                    url,
+                    json={
+                        "inputs": prompt,
+                        "parameters": {
+                            "details": True,
+                            **gen_kwargs,
+                        },
+                    },
+                    auth=aws_auth,
                 )
+                if res.status_code != 200:
+                    raise Exception(res.text)
+                # parse response
+                res = res.json()[0]
+
+                # convert to schema
                 parsed = ChatCompletionResponseChoice(
                     index=_i,
-                    message=ChatMessage(role="assistant", content=res.generated_text),
-                    finish_reason=res.details.finish_reason.value,
+                    message=ChatMessage(role="assistant", content=res["generated_text"]),
+                    finish_reason=res["details"]["finish_reason"],
                 )
-                generated_tokens += res.details.generated_tokens
+                generated_tokens += res["details"]["generated_tokens"]
                 choices.append(parsed)
                 logger.debug(f"Response at index {_i}:\n{parsed}")
             # calculate usage details
@@ -244,29 +210,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
 
 def stream_completion_request(client, prompt, stop, gen_kwargs, model):
     """Utility function for completion chat requests."""
-    id = f"hf-{generate(size=10)}"
-    res = client.text_generation(
-        prompt,
-        stream=True,
-        details=True,
-        **gen_kwargs,
-    )
-    # yield each generated token
-    for _idx, chunk in enumerate(res):
-        # skip special tokens
-        if chunk.token.special:
-            continue
-        # stop if we encounter a stop sequence
-        if chunk.token.text in stop:
-            break
-        # yield the generated token
-        yield dump_object(
-            CompletionStreamResponse(
-                id=id,
-                model=model,
-                choices=[CompletionResponseStreamChoice(index=0, text=chunk.token.text, logprobs=chunk.token.logprob)],
-            )
-        )
+    raise NotImplementedError("SageMaker is not yet supporting streaming requests")
 
 
 class Completion:
@@ -351,13 +295,10 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
 
         # if the model is a url, use it directly
         if request.model:
-            url = f"{api_base}/{request.model}"
+            url = f"{api_base}/{request.model}/invocations"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
-
-        # create the client
-        client = InferenceClient(url, token=api_key)
 
         # create stop sequences
         if isinstance(request.stop, list):
@@ -372,7 +313,6 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         if request.stream is True and request.n > 1:
             raise ValueError("Cannot stream more than one completion")
 
-        # create generation parameters
         gen_kwargs = {
             "do_sample": True,
             "return_full_text": True if request.echo else False,
@@ -391,28 +331,41 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
         if request.temperature == 0:
             gen_kwargs.pop("temperature")
             gen_kwargs["do_sample"] = False
+
         logger.debug(f"Generation parameters:\n{gen_kwargs}")
 
         if request.stream:
-            return stream_completion_request(client, prompt, stop, gen_kwargs, request.model)
+            return stream_completion_request(url, prompt, stop, gen_kwargs, request.model)
         else:
             choices = []
             generated_tokens = 0
             for _i in range(request.n):
-                res = client.text_generation(
-                    prompt,
-                    details=True,
-                    **gen_kwargs,
+                res = requests.request(
+                    "POST",
+                    url,
+                    json={
+                        "inputs": prompt,
+                        "parameters": {
+                            "details": True,
+                            **gen_kwargs,
+                        },
+                    },
+                    auth=aws_auth,
                 )
+                if res.status_code != 200:
+                    raise Exception(res.text)
+                # parse response
+                res = res.json()[0]
+                # convert to schema
                 parsed = CompletionResponseChoice(
                     index=_i,
-                    text=res.generated_text,
-                    finish_reason=res.details.finish_reason.value,
+                    text=res["generated_text"],
+                    finish_reason=res["details"]["finish_reason"],
                 )
                 if request.logprobs:
-                    parsed.logprobs = res.details.tokens
+                    parsed.logprobs = res["details"]["tokens"]
 
-                generated_tokens += res.details.generated_tokens
+                generated_tokens += res["details"]["generated_tokens"]
                 choices.append(parsed)
                 logger.debug(f"Response at index {_i}:\n{parsed}")
             # calcuate usage details
@@ -464,26 +417,27 @@ class Embedding:
 
         # if the model is a url, use it directly
         if request.model:
-            if api_base.endswith("/models"):
-                url = f"{api_base.replace('/models', '/pipeline/feature-extraction')}/{request.model}"
-            else:
-                url = f"{api_base}/{request.model}"
+            url = f"{api_base}/{request.model}/invocations"
             logger.debug(f"Url:\n{url}")
         else:
             url = api_base
 
-        # create the client
-        client = InferenceClient(url, token=api_key)
-
         # client is currently not supporting batched request thats why we run sequentially
         emb = []
-        res = client.post(json={"inputs": request.input, "model": request.model, "task": "feature-extraction"})
-        parsed_res = json.loads(res.decode())
+        res = requests.request(
+            "POST",
+            url,
+            json={"inputs": request.input},
+            auth=aws_auth,
+        )
+        res = res.json()
+        parsed_res = res.get("vectors", res.get("predictions", res.get("embeddings", None)))
+
         if isinstance(request.input, list):
             for idx, i in enumerate(parsed_res):
                 emb.append(EmbeddingsObjectResponse(index=idx, embedding=i))
         else:
-            emb.append(EmbeddingsObjectResponse(index=0, embedding=parsed_res))
+            emb.append(EmbeddingsObjectResponse(index=0, embedding=parsed_res[0]))
 
         if isinstance(res, list):
             # TODO: only approximating tokens
@@ -505,10 +459,3 @@ class Embedding:
         Creates a new chat completion for the provided messages and parameters.
         """
         raise NotImplementedError("ChatCompletion.acreate is not implemented")
-
-
-def dump_object(object):
-    if parse(importlib.metadata.version("pydantic")) < parse("2.0.0"):
-        return object.dict()
-    else:
-        return object.model_dump(exclude_none=True)
