@@ -11,7 +11,7 @@ class NonAlphaNumericFilter(BaseModel):
 
     name: str = "non_alpha_numeric"
     regex: re.Pattern = re.compile("[^a-zA-Z0-9\s]")
-    cutoff_percentage: float = 0.2
+    remove_percentage: float = 0.2
 
     def __call__(self, text):
         num_characters = len(text)
@@ -20,8 +20,8 @@ class NonAlphaNumericFilter(BaseModel):
             return True
         # calculate the percentage of non-alphanumeric characters
         percentage = 1 - ((num_characters - len(self.regex.findall(text))) / num_characters)
-        # if the percentage is greater than the cutoff_percentage then remove
-        if percentage > self.cutoff_percentage:
+        # if the percentage is greater than the remove_percentage then remove
+        if percentage > self.remove_percentage:
             return True
         # otherwise keep
         return False
