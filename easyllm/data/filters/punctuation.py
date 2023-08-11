@@ -16,9 +16,14 @@ class PunctuationFilter(BaseModel):
     def __call__(self, text):
         sentences = text.split("\n")
         # count the number of sentences not ending with a punctuation mark
-        num_sentences_wo_p = sum(1 for sentence in sentences if sentence[-1] not in self.punctuations)
+        punc_counter = 0
+        for sentence in sentences:
+            for punc in self.punctuations:
+                if not sentence.endswith(punc):
+                    punc_counter += 1
+                    break
         # check if the ratio of sentences not ending with a punctuation mark is greater than the remove percentage
-        if num_sentences_wo_p / len(sentences) > self.remove_percentage:
+        if punc_counter / len(sentences) > self.remove_percentage:
             return True
         # otherwise keep
         return False
