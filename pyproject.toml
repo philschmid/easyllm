@@ -36,7 +36,7 @@ scripts = { easyllm = "easyllm.cli:main" }
 dependencies = ["pydantic==2.1.1", "nanoid==2.0.0", "huggingface-hub==0.16.4"]
 
 [project.optional-dependencies]
-data = ["datasets","https://github.com/kpu/kenlm/archive/master.zip","sentencepiece"]
+data = ["datasets","kenlm @ https://github.com/kpu/kenlm/archive/master.zip","sentencepiece"]
 test = ["pytest", "ruff", "black", "isort", "mypy", "hatch"]
 dev = ["ruff", "black", "isort", "mypy", "hatch"]
 docs = [
