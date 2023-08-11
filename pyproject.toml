@@ -10,6 +10,9 @@ Source = "https://github.com/unknown/hatch-demo"
 [tool.hatch.version]
 path = "easyllm/__init__.py"
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [project]
 name = "easyllm"
 description = "Description"
