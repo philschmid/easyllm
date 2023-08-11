@@ -1,11 +1,11 @@
 
-import os
+import importlib.util
 import re
 import unicodedata
 from typing import Dict
-import importlib.util
-from pydantic import BaseModel, ConfigDict
+
 from huggingface_hub import hf_hub_download
+from pydantic import BaseModel, ConfigDict
 
 _kenlm = importlib.util.find_spec("kenlm") is not None
 _sentencepiece = importlib.util.find_spec("sentencepiece") is not None
@@ -99,14 +99,14 @@ class KenlmModel:
     def from_pretrained(
         cls,
         language_or_path: str,
-    ):      
-        try: 
+    ):
+        try:
           model = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.arpa.bin")
           tokenizer = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.sp.model")
         except:
           raise ValueError(f"KenLM model for {language_or_path} not found at https://huggingface.co/philschmid/kenlm. Please train your own model and upload it to the hub.")
-          
-          
+
+
         return cls(
             model,
             tokenizer,
@@ -198,4 +198,4 @@ class PerplexityFilter(BaseModel):
         # returns True if the perplexity of the document outside of the threshold,
         # meaning smaller than min_threshold or larger than max_threshold
         return not self.min_threshold <= self.model.get_perplexity(doc) <= self.max_threshold
-  
+
