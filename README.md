@@ -29,7 +29,7 @@ EasyLLM implements clients that are **compatible with OpenAI's Completion API**.
   * `huggingface.ChatCompletion` - Chat with LLMs
   * `huggingface.Completion` - Text completion with LLMs
   * `huggingface.Embedding` - Create embeddings with LLMs
-* * `sagemaker` - Open LLMs deployed on Amazon SageMaker
+* `sagemaker` - Open LLMs deployed on Amazon SageMaker
   * `sagemaker.ChatCompletion` - Chat with LLMs
   * `sagemaker.Completion` - Text completion with LLMs
   * `sagemaker.Embedding` - Create embeddings with LLMs
