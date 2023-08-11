@@ -1,4 +1,3 @@
-import re
 from typing import List
 
 from pydantic import BaseModel
@@ -17,11 +16,35 @@ class PunctuationFilter(BaseModel):
     def __call__(self, text):
         sentences = text.split("\n")
         # count the number of sentences not ending with a punctuation mark
-        num_sentences_wo_p = sum(
-            1 for sentence in sentences if sentence[-1] not in self.punctuations
-        )
+        num_sentences_wo_p = sum(1 for sentence in sentences if sentence[-1] not in self.punctuations)
         # check if the ratio of sentences not ending with a punctuation mark is greater than the remove percentage
         if num_sentences_wo_p / len(sentences) > self.remove_percentage:
+            return True
+        # otherwise keep
+        return False
+
+
+class EllipsisFilter(BaseModel):
+    """
+    Ref: C4 Raffel et al.
+    Desc: If more than 30% of the sentences endwith an elipsis then remove
+    """
+
+    name: str = "ellipsis"
+    ellipsis: List[str] = ["...", "[...]", "…", "(...)", "[…]", "-»", "read more..", "read more"]
+    remove_percentage: float = 0.3
+
+    def __call__(self, text):
+        sentences = text.split("\n")
+        # count the number of sentences ending with an ellipsis
+        ellipsis_counter = 0
+        for sentence in sentences:
+            for ellipsis in self.ellipsis:
+                if sentence.endswith(ellipsis):
+                    ellipsis_counter += 1
+                    break
+        # check if the ratio of sentences ending with an ellipsis is greater than the remove percentage
+        if ellipsis_counter / len(sentences) > self.remove_percentage:
             return True
         # otherwise keep
         return False
