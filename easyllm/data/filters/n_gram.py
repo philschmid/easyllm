@@ -1,10 +1,11 @@
-from pydantic import BaseModel
-from itertools import chain
 from collections import Counter
+from itertools import chain
+
+from pydantic import BaseModel
 
 
 def get_ngrams(input_list, n):
-    return [item for item in zip(*[input_list[i:] for i in range(n)])]
+    return list(zip(*[input_list[i:] for i in range(n)]))
 
 
 class TopNGramsFilter(BaseModel):

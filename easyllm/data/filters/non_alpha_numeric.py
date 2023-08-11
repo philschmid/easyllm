@@ -10,7 +10,7 @@ class NonAlphaNumericFilter(BaseModel):
     """
 
     name: str = "non_alpha_numeric"
-    regex: re.Pattern = re.compile("[^a-zA-Z0-9\s]")
+    regex: re.Pattern = re.compile(r"[^a-zA-Z0-9\s]")
     remove_percentage: float = 0.2
 
     def __call__(self, text):

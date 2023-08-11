@@ -103,8 +103,8 @@ class KenlmModel:
         try:
           model = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.arpa.bin")
           tokenizer = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.sp.model")
-        except:
-          raise ValueError(f"KenLM model for {language_or_path} not found at https://huggingface.co/philschmid/kenlm. Please train your own model and upload it to the hub.")
+        except Exception:
+          raise ValueError(f"KenLM model for {language_or_path} not found at https://huggingface.co/philschmid/kenlm. Please train your own model and upload it to the hub.") from None
 
 
         return cls(
