@@ -23,7 +23,7 @@ class PunctuationFilter(BaseModel):
                     punc_counter += 1
                     break
         # check if the ratio of sentences not ending with a punctuation mark is greater than the remove percentage
-        if 1 - (punc_counter / len(sentences)) > self.remove_percentage:
+        if punc_counter / len(sentences) < self.remove_percentage:
             return True
         # otherwise keep
         return False

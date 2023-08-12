@@ -1,4 +1,3 @@
-
 import importlib.util
 import re
 import unicodedata
@@ -11,9 +10,8 @@ _kenlm = importlib.util.find_spec("kenlm") is not None
 _sentencepiece = importlib.util.find_spec("sentencepiece") is not None
 
 if _kenlm or not _sentencepiece:
-  import kenlm
-  import sentencepiece
-
+    import kenlm
+    import sentencepiece
 
 
 class SentencePiece:
@@ -68,10 +66,8 @@ class KenlmModel:
         "％": "%",
         "►": "-",
     }
-    unicode_punct_re:re.Pattern = re.compile(f"[{''.join(unicode_punct.keys())}]")
-    non_printing_chars_re:re.Pattern = re.compile(
-        f"[{''.join(map(chr, list(range(0,32)) + list(range(127,160))))}]"
-    )
+    unicode_punct_re: re.Pattern = re.compile(f"[{''.join(unicode_punct.keys())}]")
+    non_printing_chars_re: re.Pattern = re.compile(f"[{''.join(map(chr, list(range(0,32)) + list(range(127,160))))}]")
     model: kenlm.Model = None
     tokenizer: SentencePiece = None
     accent: bool = False
@@ -101,11 +97,12 @@ class KenlmModel:
         language_or_path: str,
     ):
         try:
-          model = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.arpa.bin")
-          tokenizer = hf_hub_download("philschmid/kenlm",filename=f"wikipedia/{language_or_path}.sp.model")
+            model = hf_hub_download("philschmid/kenlm", filename=f"wikipedia/{language_or_path}.arpa.bin")
+            tokenizer = hf_hub_download("philschmid/kenlm", filename=f"wikipedia/{language_or_path}.sp.model")
         except Exception:
-          raise ValueError(f"KenLM model for {language_or_path} not found at https://huggingface.co/philschmid/kenlm. Please train your own model and upload it to the hub.") from None
-
+            raise ValueError(
+                f"KenLM model for {language_or_path} not found at https://huggingface.co/philschmid/kenlm. Please train your own model and upload it to the hub."
+            ) from None
 
         return cls(
             model,
@@ -187,15 +184,17 @@ class PerplexityFilter(BaseModel):
     max_threshold: int = 1000
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    def __init__(self,language:str,min_threshold:int=0,max_threshold:int=1000):
+    def __init__(self, language: str, min_threshold: int = 0, max_threshold: int = 1000):
         super().__init__()
         self.min_threshold = min_threshold
         self.max_threshold = max_threshold
         self.model = KenlmModel.from_pretrained(language)
 
-
     def __call__(self, doc: str) -> bool:
         # returns True if the perplexity of the document outside of the threshold,
         # meaning smaller than min_threshold or larger than max_threshold
-        return not self.min_threshold <= self.model.get_perplexity(doc) <= self.max_threshold
-
+        perplexity = self.model.get_perplexity(doc)
+        if perplexity < self.min_threshold or perplexity > self.max_threshold:
+            return True
+        # otherwise keep
+        return False
