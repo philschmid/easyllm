@@ -4,12 +4,16 @@ The `prompt_utils`  module contains functions to assist with converting Message'
 
 Supported prompt formats:
 
-* [Llama 2](#llama-2-chat-builder)
-* [Vicuna](#vicuna-chat-builder)
-* [Hugging Face ChatML](#hugging-face-chatml-builder)
-* [WizardLM](#wizardlm-chat-builder)
-* [StableBeluga2](#stablebeluga2-chat-builder)
-* [Open Assistant](#open-assistant-chat-builder)
+- [Prompt utilities](#prompt-utilities)
+  - [Set prompt builder for client](#set-prompt-builder-for-client)
+  - [Llama 2 Chat builder](#llama-2-chat-builder)
+  - [Vicuna Chat builder](#vicuna-chat-builder)
+  - [Hugging Face ChatML builder](#hugging-face-chatml-builder)
+    - [StarChat](#starchat)
+    - [Falcon](#falcon)
+  - [WizardLM Chat builder](#wizardlm-chat-builder)
+  - [StableBeluga2 Chat builder](#stablebeluga2-chat-builder)
+  - [Open Assistant Chat builder](#open-assistant-chat-builder)
 
 Prompt utils are also exporting a mapping dictionary `PROMPT_MAPPING` that maps a model name to a prompt builder function. This can be used to select the correct prompt builder function via an environment variable. 
 
@@ -42,11 +46,13 @@ Example Models:
 * [meta-llama/Llama-2-70b-chat-hf](https://huggingface.co/meta-llama/Llama-2-70b-chat-hf)
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_llama2_prompt
 
+
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_llama2_prompt(messages)
 ```
@@ -62,11 +68,12 @@ Example Models:
 
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_vicuna_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_vicuna_prompt(messages)
 ```
@@ -81,11 +88,12 @@ Example Models:
 ### StarChat
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_chatml_starchat_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_chatml_starchat_prompt(messages)
 ```
@@ -93,11 +101,12 @@ prompt = build_chatml_starchat_prompt(messages)
 ### Falcon
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_chatml_falcon_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_chatml_falcon_prompt(messages)
 ```
@@ -111,11 +120,12 @@ Example Models:
 * [WizardLM/WizardLM-13B-V1.2](https://huggingface.co/WizardLM/WizardLM-13B-V1.2)
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_wizardlm_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_wizardlm_prompt(messages)
 ```
@@ -125,11 +135,12 @@ prompt = build_wizardlm_prompt(messages)
 Creates StableBeluga2 prompt for a chat conversation. If a `Message` with an unsupported `role` is passed, an error will be thrown. [Reference](https://huggingface.co/stabilityai/StableBeluga2)
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_stablebeluga_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_stablebeluga_prompt(messages)
 ```
@@ -143,11 +154,12 @@ Example Models:
 * [OpenAssistant/llama2-13b-orca-8k-3319](https://huggingface.co/OpenAssistant/llama2-13b-orca-8k-33192)
 
 ```python
+from easyllm.schema.base import ChatMessage
 from easyllm.prompt_utils import build_open_assistant_prompt
 
 messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Explain asynchronous programming in the style of the pirate Blackbeard."},
+    ChatMessage(role="system", content="You are a helpful assistant."),
+    ChatMessage(role="user", content="Explain asynchronous programming in the style of the pirate Blackbeard."),
 ]
 prompt = build_open_assistant_prompt(messages)
 ```
