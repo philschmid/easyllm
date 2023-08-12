@@ -4,16 +4,12 @@ The `prompt_utils`  module contains functions to assist with converting Message'
 
 Supported prompt formats:
 
-- [Prompt utilities](#prompt-utilities)
-  - [Set prompt builder for client](#set-prompt-builder-for-client)
-  - [Llama 2 Chat builder](#llama-2-chat-builder)
-  - [Vicuna Chat builder](#vicuna-chat-builder)
-  - [Hugging Face ChatML builder](#hugging-face-chatml-builder)
-    - [StarChat](#starchat)
-    - [Falcon](#falcon)
-  - [WizardLM Chat builder](#wizardlm-chat-builder)
-  - [StableBeluga2 Chat builder](#stablebeluga2-chat-builder)
-  - [Open Assistant Chat builder](#open-assistant-chat-builder)
+* [Llama 2](#llama-2-chat-builder)
+* [Vicuna](#vicuna-chat-builder)
+* [Hugging Face ChatML](#hugging-face-chatml-builder)
+* [WizardLM](#wizardlm-chat-builder)
+* [StableBeluga2](#stablebeluga2-chat-builder)
+* [Open Assistant](#open-assistant-chat-builder)
 
 Prompt utils are also exporting a mapping dictionary `PROMPT_MAPPING` that maps a model name to a prompt builder function. This can be used to select the correct prompt builder function via an environment variable. 
 
