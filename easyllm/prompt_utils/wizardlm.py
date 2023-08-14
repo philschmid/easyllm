@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Dict, List, Union
 
 from easyllm.schema.base import ChatMessage
 
@@ -6,7 +6,7 @@ from easyllm.schema.base import ChatMessage
 wizardlm_stop_sequences = ["</s>"]
 
 
-def build_wizardlm_prompt(messages: Union[List[ChatMessage], str]) -> str:
+def build_wizardlm_prompt(messages: Union[List[Dict[str,str]], str]) -> str:
     """
     Builds a WizardLM prompt for a chat conversation. refrence https://github.com/nlpxucan/WizardLM/blob/4af9edc59e412a49bba51cd1e8cfac2664e909e5/WizardLM/src/infer_wizardlm13b.py#L79
 
@@ -22,6 +22,8 @@ def build_wizardlm_prompt(messages: Union[List[ChatMessage], str]) -> str:
 
     if isinstance(messages, str):
         messages = [ChatMessage(content="", role="system"), ChatMessage(content=messages, role="user")]
+    else:
+        messages = [ChatMessage(**message) for message in messages]
 
     for index, message in enumerate(messages):
         if message.role == "user":
