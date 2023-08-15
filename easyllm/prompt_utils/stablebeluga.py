@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Dict, List, Union
 
 from easyllm.schema.base import ChatMessage
 
@@ -6,7 +6,7 @@ from easyllm.schema.base import ChatMessage
 stablebeluga_stop_sequences = ["</s>"]
 
 
-def build_stablebeluga_prompt(messages: Union[List[ChatMessage], str]) -> str:
+def build_stablebeluga_prompt(messages: Union[List[Dict[str, str]], str]) -> str:
     """
     Builds a stablebeluga prompt for a chat conversation. refrence https://huggingface.co/stabilityai/StableBeluga2 or
 
@@ -23,6 +23,8 @@ def build_stablebeluga_prompt(messages: Union[List[ChatMessage], str]) -> str:
 
     if isinstance(messages, str):
         messages = [ChatMessage(content="", role="system"), ChatMessage(content=messages, role="user")]
+    else:
+        messages = [ChatMessage(**message) for message in messages]
 
     for index, message in enumerate(messages):
         if message.role == "user":
