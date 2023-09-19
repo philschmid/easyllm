@@ -6,7 +6,7 @@ from easyllm.schema.base import ChatMessage
 vicuna_stop_sequences = ["</s>"]
 
 
-def build_vicuna_prompt(messages: Union[List[Dict[str,str]], str]) -> str:
+def build_vicuna_prompt(messages: Union[List[Dict[str, str]], str]) -> str:
     """
     Builds a Vicuna prompt for a chat conversation. refrence https://github.com/lm-sys/FastChat/blob/main/docs/vicuna_weights_version.md#prompt-template
 
@@ -24,7 +24,8 @@ def build_vicuna_prompt(messages: Union[List[Dict[str,str]], str]) -> str:
     if isinstance(messages, str):
         messages = [ChatMessage(content="", role="system"), ChatMessage(content=messages, role="user")]
     else:
-        messages = [ChatMessage(**message) for message in messages]
+        if isinstance(messages[0], dict):
+            messages = [ChatMessage(**message) for message in messages]
 
     for index, message in enumerate(messages):
         if message.role == "user":
