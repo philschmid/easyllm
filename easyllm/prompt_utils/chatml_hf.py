@@ -5,7 +5,7 @@ from easyllm.schema.base import ChatMessage
 chatml_falcon_stop_sequences = ["<|endoftext|>"]
 
 
-def build_chatml_falcon_prompt(messages: Union[List[Dict[str,str]], str]) -> str:
+def build_chatml_falcon_prompt(messages: Union[List[Dict[str, str]], str]) -> str:
     EOS_TOKEN = "<|endoftext|>"
     return build_chatml_hf_prompt(messages, EOS_TOKEN)
 
@@ -13,12 +13,12 @@ def build_chatml_falcon_prompt(messages: Union[List[Dict[str,str]], str]) -> str
 chatml_starchat_stop_sequences = ["<|end|>"]
 
 
-def build_chatml_starchat_prompt(messages: Union[List[Dict[str,str]], str]) -> str:
+def build_chatml_starchat_prompt(messages: Union[List[Dict[str, str]], str]) -> str:
     EOS_TOKEN = "<|end|>"
     return build_chatml_hf_prompt(messages, EOS_TOKEN)
 
 
-def build_chatml_hf_prompt(messages: Union[List[Dict[str,str]], str], EOS_TOKEN="<|end|>") -> str:
+def build_chatml_hf_prompt(messages: Union[List[Dict[str, str]], str], EOS_TOKEN="<|end|>") -> str:
     """
     Uses HuggingFaceH4 ChatML template used to in Models like, StarChat or Falcon. Uses <|user|>, <|end|>, <|system|>, and <|assistant> tokens. If a Message with an unsupported role is passed, an error will be thrown.
     <|system|>\nYou are a chat bot.<|end|>\n<|user|>\nHello!<|end|>\n<|assistant|>\nHi there!<|end|>\n<|assistant|>
@@ -34,7 +34,8 @@ def build_chatml_hf_prompt(messages: Union[List[Dict[str,str]], str], EOS_TOKEN=
     if isinstance(messages, str):
         messages = [ChatMessage(content="", role="system"), ChatMessage(content=messages, role="user")]
     else:
-        messages = [ChatMessage(**message) for message in messages]
+        if isinstance(messages[0], dict):
+            messages = [ChatMessage(**message) for message in messages]
 
     for index, message in enumerate(messages):
         if message.role == "user":

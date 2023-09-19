@@ -128,6 +128,7 @@ nav:
       - examples/inference-endpoints-example.ipynb
       - examples/llama2-rag-example.ipynb
       - examples/llama2-agent-example.ipynb
+      - examples/falcon-180b-chat.ipynb
     - "Amazon SageMaker":
       - examples/sagemaker-chat-completion-api.ipynb
       - examples/sagemaker-text-completion-api.ipynb

@@ -24,7 +24,8 @@ def build_stablebeluga_prompt(messages: Union[List[Dict[str, str]], str]) -> str
     if isinstance(messages, str):
         messages = [ChatMessage(content="", role="system"), ChatMessage(content=messages, role="user")]
     else:
-        messages = [ChatMessage(**message) for message in messages]
+        if isinstance(messages[0], dict):
+            messages = [ChatMessage(**message) for message in messages]
 
     for index, message in enumerate(messages):
         if message.role == "user":
