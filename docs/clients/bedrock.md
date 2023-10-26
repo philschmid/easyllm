@@ -45,7 +45,6 @@ Supported parameters are:
 * `max_tokens` - The maximum number of tokens to generate. Defaults to 1024.
 * `stop` - The stop sequence(s) to use for the completion. Defaults to None.
 * `stream` - Whether to stream the completion. Defaults to False.
-* `frequency_penalty` - The frequency penalty to use for the completion. Defaults to 1.0.
 * `debug` - Whether to enable debug logging. Defaults to False.
 
 
