@@ -1,3 +1,5 @@
+from easyllm.prompt_utils.anthropic import anthropic_stop_sequences, build_anthropic_prompt
+
 from .chatml_hf import (
     build_chatml_falcon_prompt,
     build_chatml_starchat_prompt,
@@ -20,4 +22,5 @@ PROMPT_MAPPING = {
     "vicuna": build_vicuna_prompt,
     "wizardlm": build_wizardlm_prompt,
     "falcon": build_falcon_prompt,
+    "anthropic": build_anthropic_prompt,
 }
