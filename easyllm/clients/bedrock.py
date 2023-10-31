@@ -193,7 +193,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
                     message=ChatMessage(role="assistant", content=res["completion"].strip()),
                     finish_reason=res["stop_reason"],
                 )
-                generated_tokens += len(res["completion"].strip()) / 4
+                generated_tokens += len(res["completion"].strip()) // 4
                 choices.append(parsed)
                 logger.debug(f"Response at index {_i}:\n{parsed}")
             # calculate usage details
