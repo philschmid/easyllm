@@ -7,7 +7,6 @@ import urllib.parse
 from datetime import datetime
 from typing import Optional
 
-from botocore.config import Config
 from requests import __version__ as requests_version
 from requests.auth import AuthBase
 from requests.compat import urlparse
@@ -15,6 +14,7 @@ from requests.models import PreparedRequest
 
 try:
     import boto3
+    from botocore.config import Config
 except ImportError:
     boto3 = None
 
