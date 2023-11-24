@@ -1,9 +1,8 @@
-from pydantic import BaseModel
-
 #
 from inscriptis import get_text
 from inscriptis.css_profiles import CSS_PROFILES
 from inscriptis.model.config import ParserConfig
+from pydantic import BaseModel
 from readability import Document
 
 INSCRIPTIS_CONFIG = ParserConfig(css=CSS_PROFILES["strict"])
