@@ -15,3 +15,13 @@ Currently supported clients are:
 - [huggingface.ChatCompletion](huggingface/#huggingfacechatcompletion) - a client for interfacing with HuggingFace models that are compatible with the OpenAI ChatCompletion API.
 - [huggingface.Completion](huggingface/#huggingfacechatcompletion) - a client for interfacing with HuggingFace models that are compatible with the OpenAI Completion API.
 - [huggingface.Embedding](huggingface/#huggingfacechatcompletion) - a client for interfacing with HuggingFace models that are compatible with the OpenAI Embedding API.
+
+## Amazon SageMaker
+
+- [sagemaker.ChatCompletion](sagemaker/#sagemakerchatcompletion) - a client for interfacing with Amazon SageMaker models that are compatible with the OpenAI ChatCompletion API.
+- [sagemaker.Completion](sagemaker/#sagemakercompletion) - a client for interfacing with Amazon SageMaker models that are compatible with the OpenAI Completion API.
+- [sagemaker.Embedding](sagemaker/#sagemakerembedding) - a client for interfacing with Amazon SageMaker models that are compatible with the OpenAI Embedding API.
+
+## Amazon Bedrock
+
+- [bedrock.ChatCompletion](bedrock/#bedrockchatcompletion) - a client for interfacing with Amazon Bedrock models that are compatible with the OpenAI ChatCompletion API.

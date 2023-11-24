@@ -24,3 +24,10 @@ The examples cover the main functionality of the library - chat, text completion
 | [Detailed ChatCompletion Example](sagemaker-chat-completion-api) | Shows how to use the ChatCompletion API to have a conversational chat with the model. |
 | [Detailed Completion Example](sagemaker-text-completion-api)     | Uses the TextCompletion API to generate text with the model.                          |
 | [Create Embeddings](sagemaker-get-embeddings)                    | Embeds text into vector representations using the model.                              |
+
+## Amazon Bedrock
+
+| Example                                                                | Description                                                                           |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [Detailed ChatCompletion Example](bedrock-chat-completion-api)         | Shows how to use the ChatCompletion API to have a conversational chat with the model. |
+| [Example how to stream chat requests](bedrock-stream-chat-completions) | Demonstrates streaming multiple chat requests to efficiently chat with the model.     |

@@ -26,7 +26,7 @@ class ChatCompletionRequest(BaseModel):
 class ChatCompletionResponseChoice(BaseModel):
     index: int
     message: ChatMessage
-    finish_reason: Optional[Literal["stop_sequence", "length", "eos_token"]] = None
+    finish_reason: Optional[Literal["stop_sequence", "length", "eos_token", "max_tokens"]] = None
 
 
 class ChatCompletionResponse(BaseModel):

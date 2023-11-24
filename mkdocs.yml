@@ -116,6 +116,7 @@ nav:
         - clients/index.md
         - clients/huggingface.md
         - clients/sagemaker.md
+        - clients/bedrock.md
       - prompt_utils.md
   - Examples:
     - examples/index.md
@@ -128,7 +129,11 @@ nav:
       - examples/inference-endpoints-example.ipynb
       - examples/llama2-rag-example.ipynb
       - examples/llama2-agent-example.ipynb
+      - examples/falcon-180b-chat.ipynb
     - "Amazon SageMaker":
       - examples/sagemaker-chat-completion-api.ipynb
       - examples/sagemaker-text-completion-api.ipynb
       - examples/sagemaker-get-embeddings.ipynb
+    - "Amazon Bedrock":
+      - examples/bedrock-chat-completion-api.ipynb
+      - examples/bedrock-stream-chat-completions.ipynb

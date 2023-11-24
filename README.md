@@ -33,6 +33,8 @@ EasyLLM implements clients that are **compatible with OpenAI's Completion API**.
   * `sagemaker.ChatCompletion` - Chat with LLMs
   * `sagemaker.Completion` - Text completion with LLMs
   * `sagemaker.Embedding` - Create embeddings with LLMs
+* `bedrock` - Amazon Bedrock LLMs
+
 
 Check out the [Examples](./examples) to get started.
 

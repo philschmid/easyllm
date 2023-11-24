@@ -3,7 +3,6 @@
 import pytest
 
 from easyllm.prompt_utils.open_assistant import build_open_assistant_prompt
-from easyllm.schema.base import ChatMessage
 
 
 def test_build_open_assistant_prompt_single_message():
@@ -15,8 +14,8 @@ def test_build_open_assistant_prompt_single_message():
 
 def test_build_open_assistant_prompt_multiple_messages():
     messages = [
-        ChatMessage(content="You are a chat bot.", role="system"),
-        ChatMessage(content="Hello!", role="user"),
+        {"content":"You are a chat bot.", "role":"system"},
+        {"content":"Hello!", "role": "user"},
     ]
     expected_output = "<|system|>You are a chat bot.</s><|prompter|>Hello!</s><|assistant|>"
     result = build_open_assistant_prompt(messages)
@@ -25,8 +24,8 @@ def test_build_open_assistant_prompt_multiple_messages():
 
 def test_build_open_assistant_prompt_function_call():
     messages = [
-        ChatMessage(content="Hello!", role="user"),
-        ChatMessage(content="some_function()", role="function"),
+        {"content":"You are a chat bot.", "role":"system"},
+        {"content":"some_function()", "role": "function"},
     ]
     with pytest.raises(ValueError, match="Open Assistant does not support function calls."):
         build_open_assistant_prompt(messages)
