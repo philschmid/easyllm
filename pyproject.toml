@@ -10,6 +10,9 @@ Source = "https://github.com/unknown/hatch-demo"
 [tool.hatch.version]
 path = "easyllm/__init__.py"
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [project]
 name = "easyllm"
 description = "Description"
@@ -36,6 +39,7 @@ scripts = { easyllm = "easyllm.cli:main" }
 dependencies = ["pydantic==2.1.1", "nanoid==2.0.0", "huggingface-hub==0.16.4"]
 
 [project.optional-dependencies]
+data = ["datasets","kenlm @ https://github.com/kpu/kenlm/archive/master.zip","sentencepiece","readability-lxml","inscriptis"]
 test = ["pytest", "ruff", "black", "isort", "mypy", "hatch"]
 bedrock = ["boto3"]
 dev = ["ruff", "black", "isort", "mypy", "hatch"]
