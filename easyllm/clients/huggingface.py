@@ -38,6 +38,7 @@ api_key = (
 )
 api_base = os.environ.get("HUGGINGFACE_API_BASE", None) or "https://api-inference.huggingface.co/models"
 api_version = os.environ.get("HUGGINGFACE_API_VERSION", None) or "2023-07-29"
+client_args = {}
 prompt_builder = os.environ.get("HUGGINGFACE_PROMPT", None)
 stop_sequences = []
 seed = 42
@@ -162,7 +163,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             url = api_base
 
         # create the client
-        client = InferenceClient(url, token=api_key)
+        client = InferenceClient(url, token=api_key, **client_args)
 
         # create stop sequences
         if isinstance(request.stop, list):
@@ -355,7 +356,7 @@ You can also use existing prompt builders by importing them from easyllm.prompt_
             url = api_base
 
         # create the client
-        client = InferenceClient(url, token=api_key)
+        client = InferenceClient(url, token=api_key, **client_args)
 
         # create stop sequences
         if isinstance(request.stop, list):
@@ -471,7 +472,7 @@ class Embedding:
             url = api_base
 
         # create the client
-        client = InferenceClient(url, token=api_key)
+        client = InferenceClient(url, token=api_key, **client_args)
 
         # client is currently not supporting batched request thats why we run sequentially
         emb = []
