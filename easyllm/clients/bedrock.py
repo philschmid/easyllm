@@ -34,11 +34,20 @@ client = get_bedrock_client(
 
 
 SUPPORTED_MODELS = [
-    "anthropic.claude-v2",
+    "anthropic.claude-instant-v1:2:100k",
+    "anthropic.claude-instant-v1",
+    "anthropic.claude-v1",
+    "anthropic.claude-v2:0:18k",
+    "anthropic.claude-v2:0:100k",
+    "anthropic.claude-v2:1:18k",
+    "anthropic.claude-v2:1:200k",
+    "anthropic.claude-v2:1",
+    "anthropic.claude-v2"
 ]
-model_version_mapping = {"anthropic.claude-v2": "bedrock-2023-05-31"}
+ANTHROPIC_MODEL_VERSION="bedrock-2023-05-31"
+model_version_mapping = {k:ANTHROPIC_MODEL_VERSION for k in SUPPORTED_MODELS}
 
-api_version = os.environ.get("BEDROCK_API_VERSION", None) or "bedrock-2023-05-31"
+api_version = os.environ.get("BEDROCK_API_VERSION", None) or ANTHROPIC_MODEL_VERSION
 prompt_builder = os.environ.get("BEDROCK_PROMPT", None)
 stop_sequences = []
 
